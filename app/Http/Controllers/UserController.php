@@ -36,19 +36,28 @@ class UserController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        $requestData = $request->validate([
-            'name' => 'required',
-            'email' => 'required|unique:users',
-            'nohp' => 'required|unique:users',
-            'akses' => 'required|in:operator,admin',
-            'password'=> 'required'
-        ]);
-        $requestData['password'] = bcrypt($requestData['password']);
-        Model::create($requestData);
-        flash('Data Berhasil di Simpan!');
-        return back();
-    }
+{
+    $requestData = $request->validate([
+        'name' => 'required|regex:/^[a-zA-Z\s]*$/',
+        'email' => 'required|email|unique:users',
+        'nohp' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|unique:users',
+        'akses' => 'required|in:operator,admin',
+        'password'=> 'required|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/'
+    ], [
+        'name.regex' => 'Format nama tidak valid. Nama hanya boleh berisi huruf dan spasi.',
+        'nohp.regex' => 'Format nomor telepon tidak valid.',
+        'password.regex' => 'Kata sandi harus terdiri dari setidaknya satu huruf besar, satu huruf kecil, satu angka, dan satu karakter khusus (@$!%*?&).',
+        'password.min' => 'Kata sandi harus terdiri dari setidaknya 8 karakter.'
+    ]);
+
+    $requestData['password'] = bcrypt($requestData['password']);
+    Model::create($requestData);
+    flash('Data Berhasil di Simpan!');
+    return back();
+}
+
+    
+
 
     /**
      * Display the specified resource.
@@ -63,7 +72,13 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $data = [
+            'model'     => \App\Models\User::findOrFail($id),
+            'method'    => 'PUT',
+            'route'     => ['user.update', $id],
+            'button'    => 'UPDATE'
+        ];
+        return view('operator.user_form', $data);
     }
 
     /**
@@ -71,7 +86,35 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $requestData = $request->validate([
+            'name' => 'required|regex:/^[a-zA-Z\s]*$/',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'nohp' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|unique:users,nohp,' . $id,
+            'akses' => 'required|in:operator,admin',
+            'password' => 'nullable|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/'
+        ], [
+            'name.regex' => 'Format nama tidak valid. Nama hanya boleh berisi huruf dan spasi.',
+            'nohp.regex' => 'Format nomor telepon tidak valid.',
+            'password.regex' => 'Kata sandi harus terdiri dari setidaknya satu huruf besar, satu huruf kecil, satu angka, dan satu karakter khusus (@$!%*?&).',
+            'password.min' => 'Kata sandi harus terdiri dari setidaknya 8 karakter.'
+        ]);
+        
+        $model = Model::findOrFail($id);
+        
+        // Jika password kosong, unset dari array $requestData
+        if ($requestData['password'] === null) {
+            unset($requestData['password']);
+        } else {
+            // Jika password tidak kosong, hash password
+            $requestData['password'] = bcrypt($requestData['password']);
+        }
+        
+        $model->fill($requestData);
+        $model->save();
+        
+        flash('Data Berhasil di Ubah!');
+        return redirect()->route('user.index');
+        
     }
 
     /**

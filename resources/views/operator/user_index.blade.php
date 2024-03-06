@@ -23,11 +23,14 @@
 
                         @forelse ($models as $item)
                             <tr>
-                                <th>{{ $loop->iteration }}</th>
-                                <th>{{ $item->name }}</th>
-                                <th>{{ $item->nohp }}</th>
-                                <th>{{ $item->email }}</th>
-                                <th>{{ $item->akses }}</th>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $item->name }}</td>
+                                <td>{{ $item->nohp }}</td>
+                                <td>{{ $item->email }}</td>
+                                <td>{{ $item->akses }}</td>
+                                <td>
+                                    <a href="{{route('user.edit',$item->id)}}">Edit</a>
+                                </td>
                             </tr>
                             
                         @empty
