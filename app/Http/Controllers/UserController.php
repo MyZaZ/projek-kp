@@ -23,7 +23,13 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $data = [
+            'model'     => new \App\Models\User(),
+            'method'    => 'POST',
+            'route'     => 'user.store',
+            'button'    => 'SIMPAN'
+        ];
+        return view('operator.user_form', $data);
     }
 
     /**
@@ -31,7 +37,17 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $requestData = $request->validate([
+            'name' => 'required',
+            'email' => 'required|unique:users',
+            'nohp' => 'required|unique:users',
+            'akses' => 'required|in:operator,admin',
+            'password'=> 'required'
+        ]);
+        $requestData['password'] = bcrypt($requestData['password']);
+        Model::create($requestData);
+        flash('Data Berhasil di Simpan!');
+        return back();
     }
 
     /**
