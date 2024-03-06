@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BerandaOperatorController;
 use App\Http\Controllers\BerandaWaliController;
+use App\Http\Controllers\UserController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,6 +27,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::prefix('operator')->middleware(['auth', 'auth.operator'])->group(function () {
     //ini route khusus untuk operator
     Route::get('beranda', [BerandaOperatorController::class, 'index'])->name('operator.beranda');
+    Route::resource('user', UserController::class);
 });
 
 
@@ -39,5 +42,6 @@ Route::prefix('admin')->middleware(['auth', 'auth.admin'])->group(function () {
 });
 
 Route::get('logout', function () {
-    Auth::user()->logout();
-});
+    Auth::logout();
+    return redirect('login');
+})->name('logout');
