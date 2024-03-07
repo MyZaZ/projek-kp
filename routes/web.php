@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BerandaOperatorController;
 use App\Http\Controllers\BerandaWaliController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WaliController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +16,10 @@ use App\Http\Controllers\UserController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+// routes/web.php
+
+
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,6 +33,10 @@ Route::prefix('operator')->middleware(['auth', 'auth.operator'])->group(function
     //ini route khusus untuk operator
     Route::get('beranda', [BerandaOperatorController::class, 'index'])->name('operator.beranda');
     Route::resource('user', UserController::class);
+    Route::resource('wali', WaliController::class);
+    Route::post('/users', [UserController::class, 'store'])->name('userstore');
+    Route::post('/wali', [WaliController::class, 'store'])->name('walistore');
+    
 });
 
 

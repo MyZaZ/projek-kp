@@ -7,14 +7,27 @@ use \App\Models\User as Model;
 
 class UserController extends Controller
 {
+    private $viewIndex = 'user_index';
+    private $viewCreate = 'user_form';
+    private $viewEdit = 'user_form';
+    private $viewShow = 'user_show';
+    private $routePrefix = 'user';
     /**
      * Display a listing of the resource.
+     *
+     * 
      */
     public function index()
     {
-        $models = Model::where('akses','<>', 'wali')->latest()->paginate(50);
-        $data['models'] = $models;
-        return view('operator.user_index', $data);
+        return view('operator.' . $this->viewIndex, [
+        'models' => Model::where('akses','<>', 'wali')
+            ->latest()
+            ->paginate(50),
+            'routePrefix' => $this->routePrefix,
+            'title' => 'Data User'
+        
+        ]);
+        
     
     }
 
@@ -24,12 +37,13 @@ class UserController extends Controller
     public function create()
     {
         $data = [
-            'model'     => new \App\Models\User(),
+            'model'     => new Model(),
             'method'    => 'POST',
-            'route'     => 'user.store',
-            'button'    => 'SIMPAN'
+            'route'     => $this->routePrefix . 'store',
+            'button'    => 'SIMPAN',
+            'title' => 'Form User'
         ];
-        return view('operator.user_form', $data);
+        return view('operator.' . $this->viewCreate, $data);
     }
 
     /**
@@ -53,7 +67,8 @@ class UserController extends Controller
     $requestData['password'] = bcrypt($requestData['password']);
     Model::create($requestData);
     flash('Data Berhasil di Simpan!');
-    return back();
+    return redirect()->route($this->routePrefix . '.index');
+
 }
 
     
@@ -73,12 +88,13 @@ class UserController extends Controller
     public function edit(string $id)
     {
         $data = [
-            'model'     => \App\Models\User::findOrFail($id),
+            'model'     => Model::findOrFail($id),
             'method'    => 'PUT',
-            'route'     => ['user.update', $id],
-            'button'    => 'UPDATE'
+            'route'     => [ $this->routePrefix . '.update', $id],
+            'button'    => 'UPDATE',
+            'title'     => 'Edit Data User'
         ];
-        return view('operator.user_form', $data);
+        return view('operator.' . $this->viewEdit, $data);
     }
 
     /**
@@ -113,7 +129,7 @@ class UserController extends Controller
         $model->save();
         
         flash('Data Berhasil di Ubah!');
-        return redirect()->route('user.index');
+        return redirect()->route($this->routePrefix . '.index');
         
     }
 
@@ -122,6 +138,15 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+
+        $model = Model::findOrFail($id);
+
+        if ($model->email == 'operator@op.com') {
+            flash('Data tidak bisa dihapus')->error();
+            return back();
+        }
+        $model->delete();
+        flash('Data berhasil dihapus');
+        return back();
     }
 }

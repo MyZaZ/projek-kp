@@ -41,6 +41,7 @@
       href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="{{ asset('font/css/all.min.css') }}">
 
     <!-- Icons. Uncomment required icon fonts -->
     <link rel="stylesheet" href="{{ asset('sneat')}}/assets/vendor/fonts/boxicons.css" />
@@ -63,6 +64,7 @@
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{{asset('sneat')}}/assets/js/config.js"></script>
+    
   </head>
 
   <body>
@@ -129,7 +131,7 @@
                   </g>
                 </svg>
               </span>
-              <span class="app-brand-text demo menu-text fw-bolder ms-2">Sneat</span>
+              <span class="app-brand-text demo menu-text fw-bolder ms-2">PaySchool</span>
             </a>
 
             <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -141,28 +143,27 @@
 
           <ul class="menu-inner py-1">
             <!-- Dashboard -->
-            <li class="menu-item active">
+            <li class="menu-item {{ \Route::is('operator.beranda') ? 'active' : '' }}">
               <a href="{{route('operator.beranda')}}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Dashboard</div>
               </a>
             </li>
-            <!-- Cards -->
-            <li class="menu-item">
-              <a href="cards-basic.html" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-collection"></i>
-                <div data-i18n="Basic">Cards</div>
-              </a>
-            </li>
   
             <!--  -->
-            <li class="menu-item">
+            <li class="menu-item {{ \Route::is('user.*') ? 'active' : '' }}">
               <a href="{{route('user.index')}}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-collection"></i>
                 <div data-i18n="Tables">Data User</div>
               </a>
             </li>
-
+            <li class="menu-item {{ \Route::is('wali.*') ? 'active' : '' }}">
+              <a href="{{route('wali.index')}}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-collection"></i>
+                <div data-i18n="Tables">Data Wali Murid</div>
+              </a>
+            </li>
+            
             <li class="menu-item">
               <a href="{{route('logout')}}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-collection"></i>
