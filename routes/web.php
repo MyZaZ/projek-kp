@@ -37,6 +37,8 @@ Route::prefix('operator')->middleware(['auth', 'auth.operator'])->group(function
     Route::resource('wali', WaliController::class);
     Route::resource('siswa', SiswaController::class);
     Route::post('/users', [UserController::class, 'store'])->name('userstore');
+    Route::post('/wali', [WaliController::class, 'store'])->name('walistore');
+    Route::post('/siswa', [SiswaController::class, 'store'])->name('siswastore');
 
 
     
@@ -46,8 +48,7 @@ Route::prefix('operator')->middleware(['auth', 'auth.operator'])->group(function
 Route::prefix('wali')->middleware(['auth', 'auth.wali'])->group(function () {
     //ini route khusus untuk wali-murid
     Route::get('beranda', [BerandaWaliController::class, 'index'])->name('wali.beranda');
-    Route::post('/wali', [WaliController::class, 'store'])->name('walistore');
-    Route::post('/siswa', [SiswaController::class, 'store'])->name('siswastore');
+
 });
 
 

@@ -56,19 +56,23 @@ class SiswaController extends Controller
     public function store(Request $request)
 {
     $requestData = $request->validate([
+        'wali_id' => 'nullable',
         'name' => 'required|regex:/^[a-zA-Z\s]*$/',
-        'email' => 'required|email|unique:users',
-        'nohp' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|unique:users',
-        'password'=> 'required|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/'
+        'nisn' => 'required|unique:siswas',
+        'jurusan' => 'required',
+        'kelas' => 'required',
+        'angkatan' => 'required',
+        'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:5000',
     ], [
-        'name.regex' => 'Format nama tidak valid. Nama hanya boleh berisi huruf dan spasi.',
-        'nohp.regex' => 'Format nomor telepon tidak valid.',
-        'password.regex' => 'Kata sandi harus terdiri dari setidaknya satu huruf besar, satu huruf kecil, satu angka, dan satu karakter khusus (@$!%*?&).',
-        'password.min' => 'Kata sandi harus terdiri dari setidaknya 8 karakter.'
+        'name.regex' => 'Format nama tidak valid. Nama hanya boleh berisi huruf dan spasi.'
     ]);
-
-    $requestData['password'] = bcrypt($requestData['password']);
-    $requestData['akses'] = 'wali';
+    if ($request->hasFile('foto')) {
+        $requestData['foto'] = $request->file('foto')->store('public');
+    }
+    if ($request->filled('wali_id')) {
+        $requestData['wali_status'] = 'ok';
+    }
+    $requestData['user_id'] = auth()->user()->id;
     Model::create($requestData);
     flash('Data Berhasil di Simpan!');
     return redirect()->route($this->routePrefix . '.index');
