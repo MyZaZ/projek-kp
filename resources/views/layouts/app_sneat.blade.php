@@ -109,6 +109,12 @@
                 <div data-i18n="Tables">Data Wali Murid</div>
               </a>
             </li>
+             <li class="menu-item {{ \Route::is('siswa.*') ? 'active' : '' }}">
+              <a href="{{route('siswa.index')}}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-collection"></i>
+                <div data-i18n="Tables">Data Siswa</div>
+              </a>
+            </li>
             
             
             <li class="menu-item">
