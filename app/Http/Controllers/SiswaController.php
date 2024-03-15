@@ -87,7 +87,12 @@ class SiswaController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return view('operator.' . $this->viewShow, [
+
+            'model' => Model::findorFail($id),
+            'title' => 'Detail Siswa'
+
+        ]);
     }
 
     /**
