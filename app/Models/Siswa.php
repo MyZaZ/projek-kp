@@ -4,13 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Nicolaslopezj\Searchable\SearchableTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 
 class Siswa extends Model
-{
+{   
     use HasFactory;
+    use SearchableTrait;
     protected $guarded = [];
+    protected $searchable = [
+
+        'columns' => [
+            'nama' => 10,
+            'nisn' => 10,
+        ],
+    
+    ];
     
     /**
      * Get the user that owns the Siswa
