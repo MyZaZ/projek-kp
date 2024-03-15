@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use \App\Models\Siswa as Model;
 use App\Models\User;
 
@@ -99,7 +100,8 @@ class SiswaController extends Controller
             'method'    => 'PUT',
             'route'     => [ $this->routePrefix . '.update', $id],
             'button'    => 'UPDATE',
-            'title'     => 'Edit Data Wali Murid'
+            'title'     => 'Edit Data Siswa',
+            'wali' => User::where('akses','wali')->pluck('name','id')
         ];
         return view('operator.' . $this->viewEdit, $data);
     }
@@ -110,27 +112,28 @@ class SiswaController extends Controller
     public function update(Request $request, string $id)
     {
         $requestData = $request->validate([
-            'name' => 'required|regex:/^[a-zA-Z\s]*$/',
-            'email' => 'required|email|unique:users,email,' . $id,
-            'nohp' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|unique:users,nohp,' . $id,
-            'password' => 'nullable|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/'
+        'wali_id' => 'nullable',
+        'nama' => 'required|regex:/^[a-zA-Z\s]*$/',
+        'nisn' => 'required|unique:siswas,nisn,' . $id,
+        'jurusan' => 'required',
+        'kelas' => 'required',
+        'angkatan' => 'required',
+        'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:5000',
         ], [
             'name.regex' => 'Format nama tidak valid. Nama hanya boleh berisi huruf dan spasi.',
-            'nohp.regex' => 'Format nomor telepon tidak valid.',
-            'password.regex' => 'Kata sandi harus terdiri dari setidaknya satu huruf besar, satu huruf kecil, satu angka, dan satu karakter khusus (@$!%*?&).',
-            'password.min' => 'Kata sandi harus terdiri dari setidaknya 8 karakter.'
         ]);
         
         $model = Model::findOrFail($id);
-        
-        // Jika password kosong, unset dari array $requestData
-        if ($requestData['password'] === null) {
-            unset($requestData['password']);
-        } else {
-            // Jika password tidak kosong, hash password
-            $requestData['password'] = bcrypt($requestData['password']);
+
+        if ($request->hasFile('foto')) {
+            Storage::delete($model -> foto);
+            $requestData['foto'] = $request->file('foto')->store('public');
         }
-        
+        if ($request->filled('wali_id')) {
+            $requestData['wali_status'] = 'ok';
+        }
+
+        $requestData['user_id'] = auth()->user()->id;
         $model->fill($requestData);
         $model->save();
         
@@ -145,7 +148,7 @@ class SiswaController extends Controller
     public function destroy(string $id)
     {
 
-        $model = Model::where('akses','wali')->firstOrFail();
+        $model = Model::firstOrFail();
         $model->delete();
         flash('Data berhasil dihapus');
         return back();
