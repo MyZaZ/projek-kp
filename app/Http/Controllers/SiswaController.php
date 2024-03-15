@@ -57,7 +57,7 @@ class SiswaController extends Controller
 {
     $requestData = $request->validate([
         'wali_id' => 'nullable',
-        'name' => 'required|regex:/^[a-zA-Z\s]*$/',
+        'nama' => 'required|regex:/^[a-zA-Z\s]*$/',
         'nisn' => 'required|unique:siswas',
         'jurusan' => 'required',
         'kelas' => 'required',

@@ -37,15 +37,15 @@
                         <div class="form-grup mt-3">
                             <label for="kelas">Kelas</label>
                             {!! Form::select('kelas', [
-                                '10' => 'X',
-                                '11' => 'XI',
-                                '12' => 'XII',
+                                'X' => 'X',
+                                'XI' => 'XI',
+                                'XII' => 'XII',
 
                             ], null, ['class' => 'form-control']) !!}
                             <span class="text-danger">{{ $errors->first('kelas') }}</span>
                         </div>
                         <div class="form-grup mt-3">
-                            <label for="angkatan">Wali Murid</label>
+                            <label for="angkatan">Angkatan</label>
                             {!! Form::selectRange('angkatan', 2023, date('Y') + 1, null, ['class' => 'form-control']) !!}
                             <span class="text-danger">{{ $errors->first('angkatan') }}</span>
                         </div>
