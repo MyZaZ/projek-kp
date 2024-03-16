@@ -78,9 +78,9 @@ class WaliController extends Controller
      */
     public function show(string $id)
     {
-        $model = Model::wali()->where('id',$id)->firstorFail();
         return view('operator.' . $this->viewShow,[
-            'model' => $model,
+            'siswa' => \App\Models\Siswa::WhereNotIn('wali_id',[$id])->pluck('nama','id'),
+            'model' => Model::wali()->where('id',$id)->firstorFail(),
             'title' => 'Detail Wali Murid'
         ]);
     }

@@ -6,6 +6,7 @@ use App\Http\Controllers\BerandaWaliController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WaliController;
 use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\WaliSiswaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +37,7 @@ Route::prefix('operator')->middleware(['auth', 'auth.operator'])->group(function
     Route::resource('user', UserController::class);
     Route::resource('wali', WaliController::class);
     Route::resource('siswa', SiswaController::class);
+    Route::resource('walisiswa', WaliSiswaController::class);
     Route::post('/users', [UserController::class, 'store'])->name('userstore');
     Route::post('/wali', [WaliController::class, 'store'])->name('walistore');
     Route::post('/siswa', [SiswaController::class, 'store'])->name('siswastore');
