@@ -119,7 +119,7 @@
             
             <li class="menu-item">
               <a href="{{route('logout')}}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-collection"></i>
+                <i class="bx bx-power-off me-2"></i>
                 <div data-i18n="Tables">Logout</div>
               </a>
             </li>

@@ -77,13 +77,32 @@ class WaliController extends Controller
      * Display the specified resource.
      */
     public function show(string $id)
-    {
-        return view('operator.' . $this->viewShow,[
-            'siswa' => \App\Models\Siswa::WhereNotIn('wali_id',[$id])->pluck('nama','id'),
-            'model' => Model::wali()->where('id',$id)->firstorFail(),
-            'title' => 'Detail Wali Murid'
-        ]);
-    }
+{
+    // Dapatkan data wali
+    $wali = Model::findOrFail($id);
+
+    // Dapatkan semua siswa yang terhubung dengan wali tersebut
+    $siswa_terhubung = $wali->siswa;
+
+    // Dapatkan ID semua siswa yang terhubung dengan wali tersebut
+    $id_siswa_terhubung = $siswa_terhubung->pluck('id')->toArray();
+
+    // Dapatkan semua siswa yang belum terhubung dengan wali atau tidak memiliki wali
+    $siswa_belum_terhubung = \App\Models\Siswa::whereDoesntHave('wali')
+        ->orWhereNotIn('id', $id_siswa_terhubung)
+        ->pluck('nama', 'id');
+
+    // Kembalikan tampilan dengan data siswa yang terhubung dan belum terhubung
+    return view('operator.' . $this->viewShow, [
+        'siswa_terhubung' => $siswa_terhubung,
+        'siswa_belum_terhubung' => $siswa_belum_terhubung,
+        'model' => $wali,
+        'title' => 'Detail Wali Murid',
+        'siswa' => $siswa_belum_terhubung // Tambahkan variabel $siswa ke dalam view
+    ]);
+}
+
+    
 
     /**
      * Show the form for editing the specified resource.

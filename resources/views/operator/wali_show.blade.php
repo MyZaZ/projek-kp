@@ -44,7 +44,7 @@
                         {!! Form::hidden('wali_id', $model->id, []) !!}
                         <div class="form-group">
                             <label for="siswa_id">Pilih Data Siswa</label>
-                            {!! Form::select('siswa_id', $siswa, null, ['class'=>'form-control select2']) !!}
+                            {!! Form::select('siswa_id', $siswa, null, ['class' => 'form-control select2']) !!}
                             <span class="text-danger">{{$errors->first('siswa_id')}}</span>
                         </div>
                         {!! Form::submit('SIMPAN', ['class' => 'btn btn-primary my-2']) !!}
