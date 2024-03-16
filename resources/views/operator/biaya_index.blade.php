@@ -42,7 +42,7 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->nama }}</td>
-                                <td>{{ number_format($item->jumlah, 0, ',', '.') }}</td>
+                                <td>{{ formatRupiah($item->jumlah) }}</td>
                                 <td>{{ $item->user->name }}</td>
                                 <td>
 
