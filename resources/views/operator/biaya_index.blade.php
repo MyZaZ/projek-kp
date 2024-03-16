@@ -14,7 +14,7 @@
                     <div class="col">
                         {!! Form::open(['route' => $routePrefix . '.index','method' => 'GET', 'class' => 'form-inline float-right']) !!}
                             <div class="input-group">
-                                <input name="q" type="text" class="form-control" placeholder="Cari Nama Siswa" aria-label="cari nama" value="{{ request('q') }}">
+                                <input name="q" type="text" class="form-control" placeholder="Cari Data" aria-label="cari data" value="{{ request('q') }}">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-primary" type="submit">
                                         <i class="bx bx-search"></i>
@@ -30,12 +30,8 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Nama Wali</th>
-                                <th>Nama</th>
-                                <th>NISN</th>
-                                <th>Jurusan</th>
-                                <th>Kelas</th>
-                                <th>Angkatan</th>
+                                <th>Nama Biaya</th>
+                                <th>Jumlah</th>
                                 <th>Created By</th>
                                 <th>Aksi</th>
                             </tr>
@@ -45,12 +41,8 @@
                             @forelse ($models as $item)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $item->wali->name }}</td>
                                 <td>{{ $item->nama }}</td>
-                                <td>{{ $item->nisn }}</td>
-                                <td>{{ $item->jurusan }}</td>
-                                <td>{{ $item->kelas }}</td>
-                                <td>{{ $item->angkatan }}</td>
+                                <td>{{ $item->jumlah }}</td>
                                 <td>{{ $item->user->name }}</td>
                                 <td>
 

@@ -64,8 +64,14 @@ class WaliSiswaController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-    {
-        //
+    {   
+        
+        $siswa = \App\Models\Siswa::findorFail($id);
+        $siswa->wali_id = null;
+        $siswa->wali_status = null;
+        $siswa->save();
+        flash('Data berhasil dihapus')->success();
+        return back();
     }
 
     /**

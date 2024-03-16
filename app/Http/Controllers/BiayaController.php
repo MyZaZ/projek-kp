@@ -1,21 +1,21 @@
 <?php
 
 namespace App\Http\Controllers;
-use \App\Http\Requests\StoreSiswaRequest;
-use \App\Http\Requests\UpdateSiswaRequest;
+use \App\Http\Requests\StoreBiayaRequest;
+use \App\Http\Requests\UpdateBiayaRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use \App\Models\Siswa as Model;
+use \App\Models\Biaya as Model;
 use App\Models\User;
 
 
-class SiswaController extends Controller
+class BiayaController extends Controller
 {
-    private $viewIndex = 'siswa_index';
-    private $viewCreate = 'siswa_form';
-    private $viewEdit = 'siswa_form';
-    private $viewShow = 'siswa_show';
-    private $routePrefix = 'siswa';
+    private $viewIndex = 'biaya_index';
+    private $viewCreate = 'biaya_form';
+    private $viewEdit = 'biaya_form';
+    private $viewShow = 'biaya_show';
+    private $routePrefix = 'biaya';
     /**
      * Display a listing of the resource.
      *
@@ -27,12 +27,12 @@ class SiswaController extends Controller
         if ($request->filled('q')) {
             $models = Model::search($request->q)->paginate(50);
         }else{
-            $models = Model::with('wali','user')->Latest()->paginate(50);
+            $models = Model::with('user')->Latest()->paginate(50);
         }
         return view('operator.' . $this->viewIndex, [
             'models' => $models,
             'routePrefix' => $this->routePrefix,
-            'title' => 'Data Siswa'
+            'title' => 'Data Biaya'
             
         
         ]);
@@ -50,8 +50,7 @@ class SiswaController extends Controller
             'method'    => 'POST',
             'route'     => $this->routePrefix . 'store',
             'button'    => 'SIMPAN',
-            'title' => 'Form Data Siswa',
-            'wali' => User::where('akses','wali')->pluck('name','id')
+            'title' => 'Form Data Biaya',
         ];
         return view('operator.' . $this->viewCreate, $data);
     }
@@ -59,16 +58,9 @@ class SiswaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreSiswaRequest $request)
+    public function store(StoreBiayaRequest $request)
 {
     $requestData = $request->validated();
-
-    if ($request->hasFile('foto')) {
-        $requestData['foto'] = $request->file('foto')->store('public');
-    }
-    if ($request->filled('wali_id')) {
-        $requestData['wali_status'] = 'ok';
-    }
     $requestData['user_id'] = auth()->user()->id;
     Model::create($requestData);
     flash('Data Berhasil di Simpan!');
@@ -101,8 +93,7 @@ class SiswaController extends Controller
             'method'    => 'PUT',
             'route'     => [ $this->routePrefix . '.update', $id],
             'button'    => 'UPDATE',
-            'title'     => 'Edit Data Siswa',
-            'wali' => User::where('akses','wali')->pluck('name','id')
+            'title'     => 'Edit Data Biaya',
         ];
         return view('operator.' . $this->viewEdit, $data);
     }
@@ -110,19 +101,11 @@ class SiswaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateSiswaRequest $request, string $id)
+    public function update(UpdateBiayaRequest $request, string $id)
     {
         $requestData = $request->validated();
         
         $model = Model::findOrFail($id);
-
-        if ($request->hasFile('foto')) {
-            Storage::delete($model -> foto);
-            $requestData['foto'] = $request->file('foto')->store('public');
-        }
-        if ($request->filled('wali_id')) {
-            $requestData['wali_status'] = 'ok';
-        }
 
         $requestData['user_id'] = auth()->user()->id;
         $model->fill($requestData);
