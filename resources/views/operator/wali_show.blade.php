@@ -21,27 +21,15 @@
                                         </tr>
                                         <tr>
                                             <td>Nama</td>
-                                            <td>{{ $model->nama }}</td>
+                                            <td>{{ $model->name }}</td>
                                         </tr>
                                         <tr>
-                                            <td>NISN</td>
-                                            <td>{{ $model->nisn }}</td>
+                                            <td>No.Hp</td>
+                                            <td>{{ $model->nohp }}</td>
                                         </tr>
                                         <tr>
-                                            <td>Jurusan</td>
-                                            <td>{{ $model->jurusan }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Kelas</td>
-                                            <td>{{ $model->kelas }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Angkatan</td>
-                                            <td>{{ $model->angkatan }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Wali Murid</td>
-                                            <td>{{ $model->wali->name }}</td>
+                                            <td>Email</td>
+                                            <td>{{ $model->email }}</td>
                                         </tr>
                                         <tr>
                                             <td>Tgl Buat</td>
@@ -51,10 +39,25 @@
                                             <td>Tgl Diubah</td>
                                             <td>{{ $model->updated_at->format('d/m/y H:i')}}</td>
                                         </tr>
+                                    </tbody>
+                                </table>
+                                <h4 class="my-3">DATA ANAK</h4>
+                                <table class="table table-light">
+                                    <thead>
                                         <tr>
-                                            <td>Dibuat oleh</td>
-                                            <td>{{ $model->user->name }}</td>
+                                            <th>No</th>
+                                            <th>Nisn</th>
+                                            <th>Nama</th>
                                         </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($model->siswa as $item)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $item->nisn }}</td>
+                                                <td>{{ $item->nama }}</td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
