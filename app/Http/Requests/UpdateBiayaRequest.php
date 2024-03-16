@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Requests;
-
+use Illuminate\Support\Str;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateBiayaRequest extends FormRequest
@@ -23,7 +23,13 @@ class UpdateBiayaRequest extends FormRequest
     {
         return [
             'nama' => 'required|unique:biayas,nama,' . $this->biaya,
-            'jumlah' => 'required',
+            'jumlah' => 'required|numeric',
         ];
+    }
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'jumlah' => str_replace('.','', $this->jumlah),
+    ]);
     }
 }
