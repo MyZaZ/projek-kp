@@ -2,26 +2,15 @@
 
 namespace App\Models;
 use App\Traits\HasFormatrupiah;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Nicolaslopezj\Searchable\SearchableTrait;
 
-class Biaya extends Model
+class Tagihan extends Model
 {
     use HasFactory;
-    use SearchableTrait;
-    use HasFormatRupiah;
     protected $guarded = [];
     protected $append = ['nama_biaya_full'];
-    protected $searchable = [
-
-        'columns' => [
-            'nama' => 10,
-            'jumlah' => 10,
-        ],
-    
-    ];
 
     protected function namaBiayaFull(): Attribute
     {
@@ -30,19 +19,25 @@ class Biaya extends Model
         );
     }
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    
+    public function siswa(): BelongsTo
+    {
+        return $this->belongsTo(Siswa::class);
+    }
+
     protected static function booted()
     {
-        static::creating(function ($biaya) {
-            $biaya->user_id = auth()->user()->id;
+        static::creating(function ($tagihan) {
+            $tagihan->user_id = auth()->user()->id;
         });
 
-        static::updating(function ($biaya) {
-            $biaya->user_id = auth()->user()->id;
+        static::updating(function ($tagihan) {
+            $tagihan->user_id = auth()->user()->id;
         });
     }
 }

@@ -13,13 +13,16 @@
                     </div>
                     <div class="col">
                         {!! Form::open(['route' => $routePrefix . '.index','method' => 'GET', 'class' => 'form-inline float-right']) !!}
-                            <div class="input-group">
-                                <input name="q" type="text" class="form-control" placeholder="Cari Data" aria-label="cari data" value="{{ request('q') }}">
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-primary" type="submit">
-                                        <i class="bx bx-search"></i>
-                                    </button>
-                                </div>
+                            <div class="row g-3">
+                            <div class="col">
+                                {!! Form::selectMonth('bulan', request('bulan'), ['class' => 'form-control']) !!}
+                            </div>
+                            <div class="col">
+                                {!! Form::selectRange('tahun', 2024, date('Y')+1, request('tahun'), ['class' => 'form-control']) !!}
+                            </div>
+                            <div class="col">
+                            <button type="submit"  class="btn btn-primary">Tampil</button>
+                            </div>
                             </div>
                         {!! Form::close() !!}
                     </div>
@@ -30,10 +33,10 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Nama Biaya</th>
-                                <th>Jumlah</th>
-                                <th>Created By</th>
-                                <th>Aksi</th>
+                                <th>NISN</th>
+                                <th>Nama</th>
+                                <th>Tanggal Tagihan</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -41,9 +44,10 @@
                             @forelse ($models as $item)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $item->nama }}</td>
-                                <td>{{ $item->formatRupiah('jumlah') }}</td>
-                                <td>{{ $item->user->name }}</td>
+                                <td>{{ $item->siswa->nisn }}</td>
+                                <td>{{ $item->siswa->nama }}</td>
+                                <td>{{ $item->tanggal_tagihan }}</td>
+                                <td>{{ $item->status }}</td>
                                 <td>
 
                                     {!! Form::open([

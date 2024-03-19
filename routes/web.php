@@ -8,7 +8,7 @@ use App\Http\Controllers\WaliController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\WaliSiswaController;
 use App\Http\Controllers\BiayaController;
-
+use App\Http\Controllers\TagihanController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -40,10 +40,12 @@ Route::prefix('operator')->middleware(['auth', 'auth.operator'])->group(function
     Route::resource('siswa', SiswaController::class);
     Route::resource('walisiswa', WaliSiswaController::class);
     Route::resource('biaya', BiayaController::class);
+    Route::resource('tagihan', TagihanController::class);
     Route::post('/users', [UserController::class, 'store'])->name('userstore');
     Route::post('/wali', [WaliController::class, 'store'])->name('walistore');
     Route::post('/siswa', [SiswaController::class, 'store'])->name('siswastore');
     Route::post('/biaya', [BiayaController::class, 'store'])->name('biayastore');
+    Route::post('/tagihan', [TagihanController::class, 'store'])->name('tagihanstore');
 
 
     
