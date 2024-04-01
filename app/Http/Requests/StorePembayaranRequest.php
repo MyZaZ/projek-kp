@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 
 class StorePembayaranRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class StorePembayaranRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +23,16 @@ class StorePembayaranRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'tanggal_bayar' => 'required|date',
+            'jumlah_dibayar' => 'required|numeric',
+            'tagihan_id' => 'required|numeric',
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'jumlah_dibayar' => str_replace('.','', $this->jumlah_dibayar),
+    ]);
     }
 }
