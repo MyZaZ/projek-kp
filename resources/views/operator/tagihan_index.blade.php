@@ -14,10 +14,10 @@
                     <div class="col">
                         {!! Form::open(['route' => $routePrefix . '.index','method' => 'GET', 'class' => 'form-inline float-right']) !!}
                             <div class="row g-3">
-                            <div class="col">
+                            <div class="col-md-4 col-sm-12">
                                 {!! Form::selectMonth('bulan', request('bulan'), ['class' => 'form-control']) !!}
                             </div>
-                            <div class="col">
+                            <div class="col-md-4 col-sm-12">
                                 {!! Form::selectRange('tahun', 2024, date('Y')+1, request('tahun'), ['class' => 'form-control']) !!}
                             </div>
                             <div class="col">
@@ -37,6 +37,7 @@
                                 <th>Nama</th>
                                 <th>Tanggal Tagihan</th>
                                 <th>Status</th>
+                                <th>Total</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -46,8 +47,9 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->siswa->nisn }}</td>
                                 <td>{{ $item->siswa->nama }}</td>
-                                <td>{{ $item->tanggal_tagihan }}</td>
+                                <td>{{ $item->tanggal_tagihan->format('d-M-Y')}}</td>
                                 <td>{{ $item->status }}</td>
+                                <td>{{ formatRupiah($item->tagihanDetails->sum('jumlah_biaya'))}}</td>
                                 <td>
 
                                     {!! Form::open([
@@ -56,10 +58,17 @@
                                     'onsubmit' => 'return confirm("Yakin ingin menghapus data ini?")',
 
                                     ]) !!}
-                                    <a href="{{route($routePrefix .'.edit',$item->id)}}" class="btn btn-warning btn-sm">
+                                    {{--<a href="{{route($routePrefix .'.edit',$item->id)}}" class="btn btn-warning btn-sm">
                                         <i class="fa fa-edit"></i>Edit
-                                    </a>
-                                    <a href="{{route($routePrefix .'.show',$item->id)}}" class="btn btn-info btn-sm">
+                                    </a>--}}
+                                    <a href="{{route($routePrefix .'.show',[
+                                        $item->id,
+                                        'siswa_id' => $item->siswa_id,
+                                        'bulan'=> $item->tanggal_tagihan->format('m'),
+                                        'tahun'=> $item->tanggal_tagihan->format('Y'),
+
+                                        
+                                        ])}}" class="btn btn-info btn-sm mx-3">
                                         <i class="fa fa-eye"></i>Detail
                                     </a>
                                     <button type="submit" class="btn btn-danger btn-sm">

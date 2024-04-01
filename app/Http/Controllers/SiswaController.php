@@ -112,26 +112,33 @@ class SiswaController extends Controller
      */
     public function update(UpdateSiswaRequest $request, string $id)
     {
-        $requestData = $request->validated();
-        
-        $model = Model::findOrFail($id);
+    $requestData = $request->validated();
+    
+    $model = Model::findOrFail($id);
 
-        if ($request->hasFile('foto')) {
-            Storage::delete($model -> foto);
-            $requestData['foto'] = $request->file('foto')->store('public');
-        }
-        if ($request->filled('wali_id')) {
-            $requestData['wali_status'] = 'ok';
+    // Periksa apakah request memiliki file foto
+    if ($request->hasFile('foto')) {
+        // Jika foto sebelumnya ada, hapus
+        if ($model->foto && Storage::exists($model->foto)) {
+            Storage::delete($model->foto);
         }
 
-        $requestData['user_id'] = auth()->user()->id;
-        $model->fill($requestData);
-        $model->save();
-        
-        flash('Data Berhasil di Ubah!');
-        return redirect()->route($this->routePrefix . '.index');
-        
+        // Simpan foto yang baru
+        $requestData['foto'] = $request->file('foto')->store('public/fotos');
     }
+
+    if ($request->filled('wali_id')) {
+        $requestData['wali_status'] = 'ok';
+    }
+
+    $requestData['user_id'] = auth()->user()->id;
+    $model->fill($requestData);
+    $model->save();
+    
+    flash('Data Berhasil di Ubah!');
+    return redirect()->route($this->routePrefix . '.index');
+    }
+
 
     /**
      * Remove the specified resource from storage.

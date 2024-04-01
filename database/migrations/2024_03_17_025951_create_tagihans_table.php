@@ -19,8 +19,6 @@ return new class extends Migration
             $table->string('kelas')->nullable();
             $table->date('tanggal_tagihan');
             $table->date('tanggal_jatuh_tempo');
-            $table->string('nama_biaya');
-            $table->string('jumlah_biaya');
             $table->string('keterangan')->nullable();
             $table->double('denda')->nullable();
             $table->enum('status', ['baru','angsur', 'lunas']);
