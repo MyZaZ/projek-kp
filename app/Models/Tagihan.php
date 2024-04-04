@@ -47,4 +47,14 @@ class Tagihan extends Model
     {
         return $this->hasMany(tagihanDetail::class);
     }
+
+    /**
+     * Get all of the comments for the Tagihan
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function pembayaran(): HasMany
+    {
+        return $this->hasMany(Pembayaran::class);
+    }
 }

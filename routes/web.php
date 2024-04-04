@@ -10,6 +10,8 @@ use App\Http\Controllers\WaliSiswaController;
 use App\Http\Controllers\BiayaController;
 use App\Http\Controllers\TagihanController;
 use App\Http\Controllers\PembayaranController;
+use App\Http\Controllers\KwitansiPembayaranController;
+use App\Http\Controllers\KartuSppController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -43,6 +45,9 @@ Route::prefix('operator')->middleware(['auth', 'auth.operator'])->group(function
     Route::resource('biaya', BiayaController::class);
     Route::resource('tagihan', TagihanController::class);
     Route::resource('pembayaran', PembayaranController::class);
+    Route::get('kwitansi-pembayaran/{id}', [KwitansiPembayaranController::class, 'show'])->name('kwitansipembayaran.show');
+    Route::get('kartuspp', [KartuSppController::class, 'index'])->name('kartuspp.index');
+
     Route::post('/users', [UserController::class, 'store'])->name('userstore');
     Route::post('/wali', [WaliController::class, 'store'])->name('walistore');
     Route::post('/siswa', [SiswaController::class, 'store'])->name('siswastore');

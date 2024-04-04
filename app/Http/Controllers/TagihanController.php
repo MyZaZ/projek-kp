@@ -65,64 +65,60 @@ class TagihanController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(StoreTagihanRequest $request)
-    {
+{
+    $validatedData = $request->validated();
+    $biayaIdArray = $validatedData['biaya_id'];
 
-        
-        $requestData = $request->validated();
-        $biayaIdArray = $requestData['biaya_id'];
-        $siswa = Siswa::latest();
+    $siswaQuery = Siswa::query();
 
-        if ($requestData['kelas'] != '') {
-            $siswa->where('kelas', $requestData['kelas']);
-        }
-        if ($requestData['angkatan'] != '') {
-            $siswa->where('angkatan', $requestData['angkatan']);
-        }
-        $siswa = $siswa->get();
-        foreach ($siswa as $item) {
-            $itemSiswa = $item;
-            $biaya = Biaya::wherein('id', $biayaIdArray)->get();
-            $dataTagihan = [
-                'siswa_id' => $itemSiswa->id,
-                'angkatan' => $requestData['angkatan'],
-                'kelas' => $requestData['kelas'],
-                'tanggal_tagihan' => $requestData['tanggal_tagihan'],
-                'tanggal_jatuh_tempo' => $requestData['tanggal_jatuh_tempo'],
-                'keterangan' => $requestData['keterangan'],
-                'status' => 'baru'
-            ];
-            $tanggalJatuhTempo = Carbon::parse($requestData['tanggal_jatuh_tempo']);
-            $tanggalTagihan = Carbon::parse($requestData['tanggal_tagihan']);
-            $bulanTagihan = $tanggalTagihan->format('m');
-            $tahunTagihan = $tanggalTagihan->format('Y');
-            $cekTagihan = Model::where('siswa_id', $itemSiswa->id)
-                        ->whereMonth('tanggal_tagihan', $bulanTagihan)
-                        ->whereYear('tanggal_tagihan', $tahunTagihan)
-                        ->first();
-                    if ($cekTagihan == null) {
-                        //simpan data
-                      $tagihan = Model::create($dataTagihan);
-                      foreach ($biaya as $itemBiaya) {
-                        TagihanDetail::create([
-                            'tagihan_id' => $tagihan->id,
-                            'nama_biaya' => $itemBiaya->nama,
-                            'jumlah_biaya' => $itemBiaya->jumlah,
-                            
-                        ]);
-                      }
-                    }
-            
-        }
-        flash("Data tagihan berhasil disimpan")->success();
-        return redirect()->route($this->routePrefix . '.index');
+    if (!empty($validatedData['kelas'])) {
+        $siswaQuery->where('kelas', $validatedData['kelas']);
     }
+    if (!empty($validatedData['angkatan'])) {
+        $siswaQuery->where('angkatan', $validatedData['angkatan']);
+    }
+
+    $siswa = $siswaQuery->get();
+
+    foreach ($siswa as $item) {
+        $tagihan = Model::firstOrCreate(
+            [
+                'siswa_id' => $item->id,
+                'tanggal_tagihan' => $validatedData['tanggal_tagihan'],
+                // Sesuaikan kondisi sesuai kebutuhan, contoh: 'angkatan' => $validatedData['angkatan']
+            ],
+            [
+                'angkatan' => $validatedData['angkatan'],
+                'kelas' => $validatedData['kelas'],
+                'tanggal_jatuh_tempo' => $validatedData['tanggal_jatuh_tempo'],
+                'keterangan' => $validatedData['keterangan'],
+                'status' => 'baru'
+            ]
+        );
+
+        foreach ($biayaIdArray as $biayaId) {
+            $biaya = Biaya::find($biayaId);
+
+            TagihanDetail::create([
+                'tagihan_id' => $tagihan->id,
+                'nama_biaya' => $biaya->nama,
+                'jumlah_biaya' => $biaya->jumlah,
+            ]);
+        }
+    }
+
+    flash("Data tagihan berhasil disimpan")->success();
+    return redirect()->route($this->routePrefix . '.index');
+}
+
+
 
     /**
      * Display the specified resource.
      */
     public function show(Request $request,$id)
     {
-        $tagihan = Model::with('siswa','tagihanDetails','user')->findOrFail($id);
+        $tagihan = Model::with('pembayaran')->findOrFail($id);
         $data['tagihan'] = $tagihan;
         $data['siswa'] = $tagihan->siswa;
         $data['priode'] = Carbon::parse($tagihan->tanggal_tagihan)->translatedFormat('F Y');
@@ -133,8 +129,11 @@ class TagihanController extends Controller
     }
 
     
-    public function destroy(Model $tagihan)
+    public function destroy(Request $tagihan,$id)
     {
-        //
+        $tagihan = Model::findorFail($id);
+        $tagihan->delete();
+        flash('Data berhasil dihapus');
+        return back();
     }
 }
