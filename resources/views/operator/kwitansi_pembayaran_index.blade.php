@@ -53,7 +53,7 @@
                         <div class="d-flex flex-row-reverse bg-dark text-white p-4">
                             <div class="py-3 px-5 text-right">
                                 <div class="mb-2">Total</div>
-                                <div class="h2 font-weight-light">{{ formatRupiah($pembayaran->sum('jumlah_dibayar')) }}</div>
+                                <div class="h2 font-weight-light">{{ formatRupiah($total_pembayaran) }}</div>
                             </div>
                         </div>
                     </div>

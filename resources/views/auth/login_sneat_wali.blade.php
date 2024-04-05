@@ -32,7 +32,7 @@
     <meta name="description" content="" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ asset('sneat')}}/assets/img/favicon/logo.png" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('sneat')}}/assets/img/favicon/login.png" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -78,7 +78,7 @@
                 <img src="{{ asset('sneat')}}/assets/img/favicon/logo.png" alt="Logo" width="70" height="70">
               </div>
               <!-- /Logo -->
-              <h4 class="mb-2">Selemat Datang Operator! 👋</h4>
+              <h4 class="mb-2">Selemat Datang Wali Murid! 👋</h4>
               <p class="mb-4">Silahkan login dengan akun anda</p>
 
                <form method="POST" action="{{ route('login') }}">

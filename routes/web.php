@@ -12,6 +12,7 @@ use App\Http\Controllers\TagihanController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\KwitansiPembayaranController;
 use App\Http\Controllers\KartuSppController;
+use App\Http\Controllers\Auth\LoginController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -52,14 +53,10 @@ Route::prefix('operator')->middleware(['auth', 'auth.operator'])->group(function
     Route::post('/wali', [WaliController::class, 'store'])->name('walistore');
     Route::post('/siswa', [SiswaController::class, 'store'])->name('siswastore');
     Route::post('/biaya', [BiayaController::class, 'store'])->name('biayastore');
-    Route::post('/tagihan', [TagihanController::class, 'store'])->name('tagihanstore');
-    
-
-
-    
+    Route::post('/tagihan', [TagihanController::class, 'store'])->name('tagihanstore'); 
 });
 
-
+Route::get('login-wali',[LoginController::class,'showLoginFormWali'])->name('login.wali');
 Route::prefix('wali')->middleware(['auth', 'auth.wali'])->group(function () {
     //ini route khusus untuk wali-murid
     Route::get('beranda', [BerandaWaliController::class, 'index'])->name('wali.beranda');
