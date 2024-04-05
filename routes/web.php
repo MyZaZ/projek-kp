@@ -13,6 +13,8 @@ use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\KwitansiPembayaranController;
 use App\Http\Controllers\KartuSppController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\WaliMuridSiswaController;
+use App\Http\Controllers\WaliMuridTagihanController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -57,10 +59,11 @@ Route::prefix('operator')->middleware(['auth', 'auth.operator'])->group(function
 });
 
 Route::get('login-wali',[LoginController::class,'showLoginFormWali'])->name('login.wali');
-Route::prefix('wali')->middleware(['auth', 'auth.wali'])->group(function () {
+Route::prefix('wali')->middleware(['auth', 'auth.wali'])->name('wali.')->group(function () {
     //ini route khusus untuk wali-murid
-    Route::get('beranda', [BerandaWaliController::class, 'index'])->name('wali.beranda');
-
+    Route::get('beranda', [BerandaWaliController::class, 'index'])->name('beranda');
+    Route::resource('siswa', WaliMuridSiswaController::class);
+    Route::resource('tagihan', WaliMuridTagihanController::class);
 });
 
 

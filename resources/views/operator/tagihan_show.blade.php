@@ -81,6 +81,10 @@
         </div>
     </div>
 </div>
+@php
+    $totalTagihan = $tagihan->tagihanDetails->sum('jumlah_biaya');
+    $totalPembayaran = 0; // Mulai dengan total pembayaran 0
+@endphp
 <div class="row mt-4">
     <div class="col-md-12">
         <div class="card">
@@ -89,32 +93,39 @@
                 <table class="table table-striped table-bordered mt-3">
                     <thead>
                         <tr>
-                            <th>#</th>
+                            <th>NO</th>
                             <th>TANGGAL</th>
-                            <th>JUMLAH</th>
+                            <th>JUMLAH DIBAYAR</th>
                             <th>METODE</th>
+                            <th>SISA</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($tagihan->pembayaran as $item)
-                        <tr>
-                            <td>
-                                <a href="{{ route('kwitansipembayaran.show', $item->id) }}" target="_blank"><i class="fa fa-print"></i></a>
-                            </td>
-                            <td>{{ \Carbon\Carbon::parse($item->tanggal_bayar)->translatedFormat('d F Y') }}</td>
-                            <td>{{ formatRupiah($item->jumlah_dibayar) }}</td>
-                            <td>{{ $item->metode_pembayaran }}</td>
-                        </tr>
+                        @foreach ($tagihan->pembayaran as $key => $item)
+                            <tr>
+                                <td>{{ $key + 1 }}</td>
+                                <td>{{ \Carbon\Carbon::parse($item->tanggal_bayar)->translatedFormat('d F Y') }}</td>
+                                <td>{{ formatRupiah($item->jumlah_dibayar) }}</td>
+                                <td>{{ $item->metode_pembayaran }}</td>
+                                <td>
+                                    @php
+                                        $totalPembayaran += $item->jumlah_dibayar; // Menambahkan jumlah pembayaran saat ini ke total pembayaran
+                                        $sisaTagihan = $totalTagihan - $totalPembayaran; // Menghitung sisa tagihan aktual
+                                        $sisaTagihan = max(0, $sisaTagihan); // Pastikan sisa tagihan tidak kurang dari 0
+                                    @endphp
+                                    {{ formatRupiah($sisaTagihan) }}
+                                </td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>
                 <h5 class="font-weight-bold mt-3">Status Pembayaran :
                     @if ($tagihan->status == 'lunas')
-                    <span class="text-success">{{ strtoupper($tagihan->status) }}</span>
-                    @elseif ($tagihan->status == 'belum lunas')
-                    <span class="text-danger">{{ strtoupper($tagihan->status) }}</span>
+                        <span class="text-success">{{ strtoupper($tagihan->status) }}</span>
+                    @elseif ($tagihan->status == 'angsur')
+                        <span class="text-warning">{{ strtoupper($tagihan->status) }}</span>
                     @else
-                    <span class="text-warning">{{ strtoupper($tagihan->status) }}</span>
+                        <span class="text-danger">{{ strtoupper($tagihan->status) }}</span>
                     @endif
                 </h5>
             </div>

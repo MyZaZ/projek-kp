@@ -34,16 +34,31 @@ class PembayaranController extends Controller
         $requestData['status_konfirmasi'] = 'sudah';
         $requestData['metode_pembayaran'] = 'manual';
         $tagihan = Tagihan::findOrFail($requestData['tagihan_id']);
-        if($requestData['jumlah_dibayar'] >= $tagihan->tagihanDetails->sum('jumlah_biaya')){
+        
+        // Hitung total jumlah yang telah dibayar
+        $total_dibayar = Pembayaran::where('tagihan_id', $requestData['tagihan_id'])->sum('jumlah_dibayar');
+        
+        // Hitung sisa tagihan setelah pembayaran
+        $sisa_tagihan = $tagihan->tagihanDetails->sum('jumlah_biaya') - $total_dibayar;
+
+        if ($requestData['jumlah_dibayar'] >= $sisa_tagihan) {
+            // Jika jumlah yang dibayar lebih dari atau sama dengan sisa tagihan,
+            // atur status tagihan menjadi 'lunas'
             $tagihan->status = 'lunas';
-        }else{
+        } else {
+            // Jika jumlah yang dibayar kurang dari sisa tagihan,
+            // atur status tagihan menjadi 'angsur'
             $tagihan->status = 'angsur';
         }
+
         $tagihan->save();
+
         Pembayaran::create($requestData);
+
         flash('Pembayaran berhasil disimpan')->success();
         return back();
     }
+
 
     /**
      * Display the specified resource.
