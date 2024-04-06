@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Tagihan;
 use App\Models\PembayaranRekening;
 use Illuminate\Http\Request;
@@ -10,14 +11,13 @@ class WaliMuridTagihanController extends Controller
 {
     public function index()
     {
-        $siswa = Auth::user()->siswa->pluck('id');
-        $data['tagihan'] = Tagihan::whereIn('siswa_id', $siswa)->get();
+        $data['tagihan'] = Tagihan::WaliSiswa()->get();
         return view('wali.tagihan_index', $data);
     }
 
     public function show($id)
     {
-        $tagihan = Tagihan::find($id);
+        $tagihan = Tagihan::WaliSiswa()->findOrFail($id);
         $bankSekolah = PembayaranRekening::all();
         $siswa = $tagihan->siswa;
         $wali = $siswa->wali;
