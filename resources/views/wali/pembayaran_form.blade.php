@@ -10,9 +10,29 @@
                 {!! Form::model($model, ['route' => $route,'method' => $method]) !!}
                     <div class="form-grup mt-3">
                             <label for="bank_id">Bank Tujuan</label>
-                           {!! Form::select('bank_id', $listBank, request('bank_sekolah_id'), ['class' => 'form-control']) !!}
+                           {!! Form::select('bank_id', $listBank, request('bank_sekolah_id'), ['class' => 'form-control','placeholder' => 'Pilih Bank Tujuan Transfer']) !!}
                             <span class="text-danger">{{ $errors->first('bank_id') }}</span>
                     </div>
+                    @if (request('bank_sekolah_id') != '')
+                        <div class="alert alert-primary mt-2 mb-2" role="alert">
+                            <table width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td width="20%">Bank Tujuan</td>
+                                                <td>: {{ $bankYangDipilih->nama_bank }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Nomor Rekening</td>
+                                                <td>: {{ $bankYangDipilih->nomor_rekening }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Atas Nama</td>
+                                                <td>: {{ $bankYangDipilih->atas_nama }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                        </div>
+                    @endif
                     <div class="form-grup mt-3">
                             <label for="tanggal_bayar">Tanggal Bayar</label>
                            {!! Form::date('tanggal_bayar',$model->tanggal_bayar ?? date('Y-m-d'), ['class' => 'form-control']) !!}
