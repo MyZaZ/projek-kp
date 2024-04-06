@@ -12,7 +12,9 @@
                         <div class="table-responsive">
                             <table class="table table-sm">
                                 <tr>
-                                    <td rowspan="4" width="100" class="align-top"><img src="{{ \Storage::url($siswa->foto) }}" alt="{{ $siswa->nama }}" width="100"></td>
+                                    <td rowspan="4" width="100" class="align-top">
+                                        <img src="{{ \Storage::url($siswa->foto) }}" alt="{{ $siswa->nama }}" width="100">
+                                    </td>
                                     <td><b>NIS</b></td>
                                     <td>: {{ $siswa->nisn }}</td>
                                 </tr>
@@ -28,17 +30,30 @@
                                     <td><b>Kelas</b></td>
                                     <td>: {{ $siswa->kelas }}</td>
                                 </tr>
+                                <tr>
+                                    <td><b>Tgl. Tagihan</b></td>
+                                    <td colspan="2">: {{ \Carbon\Carbon::parse($tagihan->tanggal_tagihan)->translatedFormat('d F Y') }}</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Tgl. Akhir Pembayaran</b></td>
+                                    <td colspan="2">: {{ \Carbon\Carbon::parse($tagihan->tanggal_jatuh_tempo)->translatedFormat('d F Y') }}</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Status</b></td>
+                                    <td colspan="2">: {{$tagihan->getStatusTagihanWali()}}</td>
+                                </tr>
                             </table>
                         </div>
                     </div>
                 </div>
+
                 <div class="table-responsive mt-4">
                     <table class="table table-bordered">
-                        <thead>
+                        <thead class="table-dark">
                             <tr>
-                                <th width="1%">No</th>
-                                <th>Nama Tagihan</th>
-                                <th class="text-end">Jumlah Tagihan</th>
+                                <td width="1%">No</td>
+                                <td>Nama Tagihan</td>
+                                <td class="text-end">Jumlah Tagihan</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -61,9 +76,12 @@
                         Pembayaran bisa dilakukan dengan cara langsung ke Tata Usaha atau melalui transfer bank, milik sekolah berikut:
                         <br>
                         Setelah melakukan transfer, silahkan upload bukti pembayaran melalui tombol konfirmasi..! sesuai bank tujuan.
+                        <br>
+                        Hubungi Tata Usaha:
+                        <a href="whatsapp://send?phone=+6281380107447&text=Hallo, saya {{ $wali->name }} dengan Nama Siswa {{ $siswa->nama }} dan NISN {{ $siswa->nisn }} dari Jurusan {{ $siswa->jurusan }} Kelas {{ $siswa->kelas }} Ingin melakukan pembayaran Terima kasih.">Klik disini untuk Melakukan Konfirmasi Melalui WhatsApp</a>
                     </div>
                     <div class="row">
-                        @foreach ($bankSekolah as $itemBank )
+                        @foreach ($bankSekolah as $itemBank)
                             <div class="col-md-4 mb-3">
                                 <div class="alert alert-primary" role="alert">
                                     <table class="table table-sm">
@@ -82,19 +100,22 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <a href="#" class="btn btn-primary btn-sm mt-3">Konfirmasi Pembayaran</a>
+                                    <a href="{{ route('wali.pembayaran.create',[
+                                        'tagihan_id' => $tagihan->id,
+                                        'bank_sekolah_id' =>  $itemBank->id,
+                                        ]) }}" class="btn btn-primary btn-sm mt-3">Konfirmasi Pembayaran</a>
                                 </div>
                             </div>
                         @endforeach
                     </div>
                     <table class="table table-striped table-bordered mt-3">
-                        <thead>
+                        <thead class="table-dark">
                             <tr>
-                                <th width="1%">NO</th>
-                                <th>TANGGAL</th>
-                                <th>JUMLAH DIBAYAR</th>
-                                <th>METODE</th>
-                                <th>SISA</th>
+                                <td width="1%">NO</td>
+                                <td>TANGGAL</td>
+                                <td>JUMLAH DIBAYAR</td>
+                                <td>METODE</td>
+                                <td>SISA</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -120,6 +141,7 @@
                             @endforeach
                         </tbody>
                     </table>
+                    
                     <h5 class="font-weight-bold mt-3">Status Pembayaran :
                         @if ($tagihan->status == 'lunas')
                             <span class="text-success">{{ strtoupper($tagihan->status) }}</span>

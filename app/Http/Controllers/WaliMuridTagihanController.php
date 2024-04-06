@@ -19,8 +19,9 @@ class WaliMuridTagihanController extends Controller
     {
         $tagihan = Tagihan::find($id);
         $bankSekolah = PembayaranRekening::all();
-        $siswa = $tagihan->siswa; // Dapatkan data siswa yang terkait dengan tagihan
-        return view('wali.tagihan_show', compact('tagihan', 'siswa','bankSekolah'));
+        $siswa = $tagihan->siswa;
+        $wali = $siswa->wali;
+        return view('wali.tagihan_show', compact('tagihan', 'siswa','bankSekolah','wali'));
     }
     
 }

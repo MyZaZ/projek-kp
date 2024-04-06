@@ -15,6 +15,7 @@ use App\Http\Controllers\KartuSppController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\WaliMuridSiswaController;
 use App\Http\Controllers\WaliMuridTagihanController;
+use App\Http\Controllers\WaliMuridPembayaranController;
 use App\Http\Controllers\PembayaranRekeningController;
 /*
 |--------------------------------------------------------------------------
@@ -67,6 +68,7 @@ Route::prefix('wali')->middleware(['auth', 'auth.wali'])->name('wali.')->group(f
     Route::get('beranda', [BerandaWaliController::class, 'index'])->name('beranda');
     Route::resource('siswa', WaliMuridSiswaController::class);
     Route::resource('tagihan', WaliMuridTagihanController::class);
+    Route::resource('pembayaran', WaliMuridPembayaranController::class);
 });
 
 
