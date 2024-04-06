@@ -17,6 +17,7 @@ use App\Http\Controllers\WaliMuridSiswaController;
 use App\Http\Controllers\WaliMuridTagihanController;
 use App\Http\Controllers\WaliMuridPembayaranController;
 use App\Http\Controllers\PembayaranRekeningController;
+use App\Http\Controllers\BankController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -53,7 +54,7 @@ Route::prefix('operator')->middleware(['auth', 'auth.operator'])->group(function
     Route::resource('rekening', PembayaranRekeningController::class);
     Route::get('kwitansi-pembayaran/{id}', [KwitansiPembayaranController::class, 'show'])->name('kwitansipembayaran.show');
     Route::get('kartuspp', [KartuSppController::class, 'index'])->name('kartuspp.index');
-
+    Route::resource('bank', BankController::class);
     Route::post('/users', [UserController::class, 'store'])->name('userstore');
     Route::post('/wali', [WaliController::class, 'store'])->name('walistore');
     Route::post('/siswa', [SiswaController::class, 'store'])->name('siswastore');
@@ -66,9 +67,11 @@ Route::get('login-wali',[LoginController::class,'showLoginFormWali'])->name('log
 Route::prefix('wali')->middleware(['auth', 'auth.wali'])->name('wali.')->group(function () {
     //ini route khusus untuk wali-murid
     Route::get('beranda', [BerandaWaliController::class, 'index'])->name('beranda');
+    Route::get('/wali/pembayaran/create', [WaliMuridPembayaranController::class, 'create'])->name('wali.pembayaran.create');
     Route::resource('siswa', WaliMuridSiswaController::class);
     Route::resource('tagihan', WaliMuridTagihanController::class);
     Route::resource('pembayaran', WaliMuridPembayaranController::class);
+    Route::resource('bank', BankController::class);
 });
 
 
