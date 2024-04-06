@@ -59,14 +59,16 @@ class Tagihan extends Model
     }
 
     public function getStatusTagihanWali()
-    {
-        if($this->status == 'baru'){
-            return 'Belum dibayar';
-        }
-        if($this->status == 'lunas'){
-            return 'Sudah dibayar';
-        
-        }
-            return $this->status;
+{
+    if ($this->status == 'baru') {
+        return 'Belum dibayar';
+    } elseif ($this->status == 'lunas') {
+        return 'Sudah dibayar';
+    } elseif ($this->status == 'angsur') {
+        return 'Angsur';
+    } else {
+        return $this->status;
     }
+}
+
 }

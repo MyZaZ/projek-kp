@@ -56,7 +56,7 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>No</th>
+                            <th width="1%">No</th>
                             <th>Nama Tagihan</th>
                             <th>Jumlah Tagihan</th>
                         </tr>
@@ -93,7 +93,7 @@
                 <table class="table table-striped table-bordered mt-3">
                     <thead>
                         <tr>
-                            <th>NO</th>
+                            <th width="1%">NO</th>
                             <th>TANGGAL</th>
                             <th>JUMLAH DIBAYAR</th>
                             <th>METODE</th>

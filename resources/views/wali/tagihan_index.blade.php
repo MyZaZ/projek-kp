@@ -22,28 +22,29 @@
                         </thead>
                         <tbody>
 
-                            @forelse ($tagihan as $item)
+                           @forelse ($tagihan as $item)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->siswa->nama }}</td>
                                 <td>{{ $item->siswa->jurusan }}</td>
                                 <td>{{ $item->siswa->kelas }}</td>
-                                <td>{{ $item->tanggal_tagihan }}</td>
-                                <td>{{ $item->getStatusTagihanWali() }}</td>
+                                <td>{{ $item->tanggal_tagihan->format('F Y') }}</td>
                                 <td>
-
-                                   
+                                    {{$item->getStatusTagihanWali()}}
+                                </td>
+                                <td>
+                                    @if ($item->status == 'baru' || $item->status == 'angsur')
+                                    <a href="{{ route('wali.tagihan.show', $item->id) }}" class="btn btn-danger">Lakukan Pembayaran</a>
+                                    @else
+                                    <a href="" class="btn btn-success">Pembayaran Sudah Lunas</a>
+                                    @endif
                                 </td>
                             </tr>
-
                             @empty
-
                             <tr>
-                                <td colspan="4">Data Tidak Ada !</td>
+                                <td colspan="7">Data Tidak Ada !</td>
                             </tr>
-
                             @endforelse
-
                         </tbody>
                     </table>
                 </div>

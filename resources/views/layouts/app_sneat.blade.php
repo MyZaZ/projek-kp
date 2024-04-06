@@ -95,8 +95,12 @@
                 <div data-i18n="Analytics">Dashboard</div>
               </a>
             </li>
-  
-            <!--  -->
+            <li class="menu-item {{ \Route::is('rekening.*') ? 'active' : '' }}">
+              <a href="{{route('rekening.index')}}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-collection"></i>
+                <div data-i18n="Tables">Rekening Sekolah</div>
+              </a>
+            </li>
             <li class="menu-item {{ \Route::is('user.*') ? 'active' : '' }}">
               <a href="{{route('user.index')}}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-collection"></i>
