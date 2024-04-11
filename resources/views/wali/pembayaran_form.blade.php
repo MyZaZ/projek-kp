@@ -4,19 +4,24 @@
         $(function() {
             $("#checkboxtoggle").click(function () {
                 if ($(this).is(":checked")) {
-                    $("#form_bank_pengirim").show();
                     $("#pilihan_bank").fadeOut();
+                    $("#form_bank_pengirim").fadeIn();
                 } else {
                     $("#pilihan_bank").fadeIn();
-                    $("#form_bank_pengirim").hide(); // Perbaikan di sini
+                    $("#form_bank_pengirim").fadeOut(); // Perbaikan di sini
                 }
             });
         });
         $(document).ready(function () {
-            $("#form_bank_pengirim").hide();
+            @if (count($walibank) >= 1)
+                $("#form_bank_pengirim").hide();
+            @else
+                //pertama bayar
+                $("#form_bank_pengirim").show();
+            @endif
             $('#pilih_bank').change(function(e) {
                 var bankId = $(this).find(":selected").val();
-                window.location.href = "{!! $url !!}&bank_sekolah_id" + bankId;
+                window.location.href = "{!! $url !!}&bank_sekolah_id=" + bankId;
             });
         });
     </script>
@@ -32,6 +37,8 @@
                     <div class="divider text">
                         <div class ="divider-text"><i class="fa fa-info-circle"></i> INFORMASI REKENING PENGIRIM</div>
                     </div>
+                    @if (count($walibank) >= 1)
+                    {{-- //sudah pernah bayar --}}
                     <div class="form-group" id="pilihan_bank">
                         <label for="wali_bank_id">Bank Pengirim</label>
                         {!! Form::select('wali_bank_id', $walibank, null, ['class' => 'form-control form-select', 'placeholder' => 'Pilih Nomor Rekening Pengirim']) !!}
@@ -43,6 +50,7 @@
                             <label class="form-check-label" for="checkboxtoggle">Saya punya rekening baru</label>
                         </div>
                     </div>
+                    @endif
                     <div class="alert alert-secondary mt-4" role="alert" id="form_bank_pengirim">
                         Informasi ini dibutuhkan agar operator sekolah dapat memverifikasi pembayaran yang dilakukan oleh wali murid melalui transfer.
                     <div class="form-group mt-2">

@@ -34,12 +34,12 @@ class WaliMuridPembayaranController extends Controller
 
     public function store(Request $request)
 {
-    if($request->wali_bank_id == '' && $request->nomor_rekening == ''){
+    if($request->wali_bank_id == '' && $request->nomor_rekening_pengirim == ''){
         flash('silahkan pilih bank pengirim')->error();
         return back();
     }
-
-    if($request->filled('pilihan_bank')) {
+    
+    if($request->nama_rekening_pengirim !='' && $request->nomor_rekening_pengirim !='') {
         //wali membuat rekening baru
         $bankId = $request->bank_id_pengirim; // Ubah dari bank_id menjadi bank_id
         $namaRekeningPengirim = $request->nama_rekening_pengirim;
@@ -66,6 +66,7 @@ class WaliMuridPembayaranController extends Controller
     } else {
         $waliBankId = $request->wali_bank_id;
         $waliBank = WaliBank::findOrFail($waliBankId);
+        
     }
 
     $jumlahDibayar = str_replace('.', '', $request->jumlah_dibayar);
