@@ -76,6 +76,7 @@ class Tagihan extends Model
     {
     return $q->whereIn('siswa_id', Auth::user()->siswa->pluck('id'));
     }
+    
 
 
 }

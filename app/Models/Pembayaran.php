@@ -38,6 +38,10 @@ class Pembayaran extends Model
             $tagihan->user_id = auth()->user()->id;
         });
     }
+    public function wali(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'wali_id');
+    }
 }
 
 

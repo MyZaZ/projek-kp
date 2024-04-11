@@ -27,7 +27,8 @@
         <div class="card">
             <h5 class="card-header">KONFIRMASI PEMBAYARAN</h5>
             <div class="card-body">
-                {!! Form::model($model, ['route' => $route,'method' => $method]) !!}
+                {!! Form::model($model, ['route' => $route,'method' => $method,'files' => true]) !!}
+                {!! Form::hidden('tagihan_id', request('tagihan_id'), []) !!}
                     <div class="divider text">
                         <div class ="divider-text"><i class="fa fa-info-circle"></i> INFORMASI REKENING PENGIRIM</div>
                     </div>
@@ -110,7 +111,9 @@
                         <span class="text-danger">{{ $errors->first('tanggal_bayar') }}</span>
                     </div>
                     <div class="form-group mt-3">
-                        <label for="bukti_bayar">Upload Bukti Pembayaran</label>
+                        <label for="bukti_bayar">Upload Bukti Pembayaran
+                         <span class="text-danger">(File harus jpg, jpeg, png, Ukuran Maksimal 5MB)</span>
+                         </label>
                         {!! Form::file('bukti_bayar', ['class' => 'form-control']) !!}
                         <span class="text-danger">{{ $errors->first('bukti_bayar') }}</span>
                     </div>

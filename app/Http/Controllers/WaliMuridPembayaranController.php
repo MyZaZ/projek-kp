@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use App\Models\PembayaranRekening;
+use App\Notifications\PembayaranNotification;
 use App\Models\Tagihan;
 use App\Models\Pembayaran;
 use App\Models\Bank;
 use App\Models\WaliBank;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class WaliMuridPembayaranController extends Controller
@@ -31,6 +34,11 @@ class WaliMuridPembayaranController extends Controller
 
     public function store(Request $request)
 {
+    if($request->wali_bank_id == '' && $request->nomor_rekening == ''){
+        flash('silahkan pilih bank pengirim')->error();
+        return back();
+    }
+
     if($request->filled('pilihan_bank')) {
         //wali membuat rekening baru
         $bankId = $request->bank_id_pengirim; // Ubah dari bank_id menjadi bank_id
@@ -57,9 +65,31 @@ class WaliMuridPembayaranController extends Controller
         
     } else {
         $waliBankId = $request->wali_bank_id;
-        //wali memilih dri select
+        $waliBank = WaliBank::findOrFail($waliBankId);
     }
-    dd($waliBank);
+    $request->validate([
+        'tanggal_bayar' => 'required',
+        'jumlah_dibayar' => 'required',
+        'bukti_bayar' => 'required|image:jpeg,png,jpg,gif,svg|max:5000',
+    ]);
+    $buktiBayar = $request->file('bukti_bayar')->store('public');
+    $dataPembayaran = [
+        'bank_id' => $request->bank_id,
+        'wali_bank_id' => $waliBank->id,
+        'tagihan_id' => $request->tagihan_id,
+        'wali_id' => auth()->user()->id,
+        'tanggal_bayar' => $request->tanggal_bayar,
+        'status_konfirmasi' => 'belum',
+        'jumlah_dibayar' => str_replace('.', '', $request->jumlah_dibayar),
+        'bukti_bayar' => $buktiBayar,
+        'metode_pembayaran' => 'transfer',
+        'user_id' => 0,
+    ];
+    $pembayaran = Pembayaran::create($dataPembayaran);
+    $userOperator = User::where('akses','operator')->get();
+    Notification::send($userOperator, new PembayaranNotification($pembayaran));
+    flash('Pembayaran berhasil disimpan dan akan segera di konfirmasi oleh operator.')->success();
+    return back();
 }
 
     
