@@ -67,6 +67,19 @@ class WaliMuridPembayaranController extends Controller
         $waliBankId = $request->wali_bank_id;
         $waliBank = WaliBank::findOrFail($waliBankId);
     }
+
+    $jumlahDibayar = str_replace('.', '', $request->jumlah_dibayar);
+ 
+    $validasiPembayaran = Pembayaran::where('jumlah_dibayar', $jumlahDibayar)
+    ->where('tagihan_id' ,$request->tagihan_id)
+    ->where('status_konfirmasi' , 'belum')
+    ->first();
+
+    if ($validasiPembayaran != null) {
+        flash('Data Pembayaran ini sudah ada, dan akan segera dikonfirmasi oleh Operator.');
+        return back();
+    }
+
     $request->validate([
         'tanggal_bayar' => 'required',
         'jumlah_dibayar' => 'required',
@@ -80,7 +93,7 @@ class WaliMuridPembayaranController extends Controller
         'wali_id' => auth()->user()->id,
         'tanggal_bayar' => $request->tanggal_bayar,
         'status_konfirmasi' => 'belum',
-        'jumlah_dibayar' => str_replace('.', '', $request->jumlah_dibayar),
+        'jumlah_dibayar' => $jumlahDibayar,
         'bukti_bayar' => $buktiBayar,
         'metode_pembayaran' => 'transfer',
         'user_id' => 0,
