@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Pembayaran extends Model
@@ -12,7 +13,14 @@ class Pembayaran extends Model
     protected $guarded = [];
     protected $dates = ['tanggal_bayar'];
     protected $with = ['user','tagihan'];
+    protected $append = ['status_konfirmasi'];
 
+    protected function statuskonfirmasi(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => ($this->tanggal_konfirmasi == null) ? 'Belum Dikonfirmasi' : 'Sudah Dikonfirmasi',
+        );
+    }
     /**
      * Get the user that owns the Pembayaran
      *
@@ -42,6 +50,27 @@ class Pembayaran extends Model
     {
         return $this->belongsTo(User::class, 'wali_id');
     }
+
+    /**
+     * Get the user that owns the Pembayaran
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function PembayaranRekening(): BelongsTo
+    {
+        return $this->belongsTo(PembayaranRekening::class, 'bank_id');
+    }
+
+    /**
+     * Get the user that owns the Pembayaran
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function WaliBank(): BelongsTo
+    {
+        return $this->belongsTo(WaliBank::class);
+    }
+    
 }
 
 

@@ -8,9 +8,6 @@
             <h5 class="card-header">DATA SISWA</h5>
             <div class="card-body">
                 <div class="row">
-                    <div class="col">
-                        <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Tambah Data</a>
-                    </div>
                 </div>
 
                 <div class="table-responsive">
@@ -25,7 +22,6 @@
                                 <th>Kelas</th>
                                 <th>Angkatan</th>
                                 <th>Created By</th>
-                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -40,10 +36,6 @@
                                 <td>{{ $item->kelas }}</td>
                                 <td>{{ $item->angkatan }}</td>
                                 <td>{{ $item->user->name }}</td>
-                                <td>
-
-                                   
-                                </td>
                             </tr>
 
                             @empty

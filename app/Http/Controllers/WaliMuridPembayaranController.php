@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\DB;
 use App\Models\PembayaranRekening;
 use App\Notifications\PembayaranNotification;
 use App\Models\Tagihan;
@@ -11,6 +12,7 @@ use App\Models\Pembayaran;
 use App\Models\Bank;
 use App\Models\WaliBank;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class WaliMuridPembayaranController extends Controller
@@ -71,14 +73,27 @@ class WaliMuridPembayaranController extends Controller
 
     $jumlahDibayar = str_replace('.', '', $request->jumlah_dibayar);
  
-    $validasiPembayaran = Pembayaran::where('jumlah_dibayar', $jumlahDibayar)
-    ->where('tagihan_id' ,$request->tagihan_id)
-    ->where('status_konfirmasi' , 'belum')
+    // Mencari pembayaran terakhir dengan nominal yang sama
+    $pembayaranTerakhir = Pembayaran::where('jumlah_dibayar', $jumlahDibayar)
+    ->where('tagihan_id', $request->tagihan_id)
+    ->latest('created_at')
     ->first();
 
-    if ($validasiPembayaran != null) {
-        flash('Data Pembayaran ini sudah ada, dan akan segera dikonfirmasi oleh Operator.');
+    if ($pembayaranTerakhir) {
+    // Menghitung waktu antara pembayaran terakhir dan pembayaran saat ini
+    $waktuTerakhir = Carbon::parse($pembayaranTerakhir->created_at);
+    $waktuSekarang = Carbon::now();
+    $perbedaanWaktu = $waktuTerakhir->diffInMinutes($waktuSekarang);
+
+    // Batas waktu antara pembayaran yang sama (misalnya, 5 menit)
+    $batasWaktu = 5;
+
+    if ($perbedaanWaktu < $batasWaktu) {
+        $sisaWaktu = $batasWaktu - $perbedaanWaktu;
+        $pesan = "Data Pembayaran ini sudah ada, dan akan segera dikonfirmasi oleh Operator. Untuk melakukan pembayaran dengan nominal yang sama, mohon tunggu selama $sisaWaktu menit.";
+        flash($pesan);
         return back();
+    }
     }
 
     $request->validate([
@@ -93,14 +108,23 @@ class WaliMuridPembayaranController extends Controller
         'tagihan_id' => $request->tagihan_id,
         'wali_id' => auth()->user()->id,
         'tanggal_bayar' => $request->tanggal_bayar,
-        'status_konfirmasi' => 'belum',
+        //'status_konfirmasi' => 'belum',
         'jumlah_dibayar' => $jumlahDibayar,
         'bukti_bayar' => $buktiBayar,
         'metode_pembayaran' => 'transfer',
         'user_id' => 0,
     ];
-    $pembayaran = Pembayaran::create($dataPembayaran);
-    $userOperator = User::where('akses','operator')->get();
+    DB::beginTransaction ();
+    try {
+            $pembayaran = Pembayaran::create($dataPembayaran);
+            $userOperator = User::where('akses','operator')->get();
+            DB::commit();
+    } catch (\Throwable $th) {
+            DB::rollback();
+            flash('Gagal Menyimpan data pembayaran,' + $th->getMessage)->error();
+            return back();
+    }
+    
     Notification::send($userOperator, new PembayaranNotification($pembayaran));
     flash('Pembayaran berhasil disimpan dan akan segera di konfirmasi oleh operator.')->success();
     return back();

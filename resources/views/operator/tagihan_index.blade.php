@@ -28,7 +28,7 @@
                     </div>
                 </div>
 
-                <div class="table-responsive">
+                <div class="table-responsive mt-3">
                     <table class="table table-striped">
                         <thead>
                             <tr>
@@ -38,6 +38,7 @@
                                 <th>Tanggal Tagihan</th>
                                 <th>Status</th>
                                 <th>Total</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -48,7 +49,25 @@
                                 <td>{{ $item->siswa->nisn }}</td>
                                 <td>{{ $item->siswa->nama }}</td>
                                 <td>{{ $item->tanggal_tagihan->format('d-M-Y')}}</td>
-                                <td>{{ $item->status }}</td>
+                                <td>
+                                    @php
+                                        $buttonClass = '';
+                                        switch ($item->status) {
+                                            case 'lunas':
+                                                $buttonClass = 'badge bg-label-success me-1';
+                                                break;
+                                            case 'angsur':
+                                                $buttonClass = 'badge bg-label-warning me-1';
+                                                break;
+                                            case 'baru':
+                                                $buttonClass = 'badge bg-label-danger me-1';
+                                                break;
+                                            default:
+                                                $buttonClass = 'btn-secondary'; // Or any other color you want for default case
+                                        }
+                                    @endphp
+                                    <button class="btn {{ $buttonClass }} btn-sm">{{ $item->status }}</button>
+                                </td>
                                 <td>{{ formatRupiah($item->tagihanDetails->sum('jumlah_biaya'))}}</td>
                                 <td>
 

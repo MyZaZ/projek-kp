@@ -62,16 +62,31 @@ class Tagihan extends Model
 
     public function getStatusTagihanWali()
 {
-    if ($this->status == 'baru') {
-        return 'Belum dibayar';
-    } elseif ($this->status == 'lunas') {
-        return 'Sudah dibayar';
-    } elseif ($this->status == 'angsur') {
-        return 'Angsur';
-    } else {
-        return $this->status;
+    switch ($this->status) {
+        case 'lunas':
+            $buttonClass = 'badge bg-label-success me-1';
+            $statusText = 'Sudah dibayar';
+            break;
+        case 'angsur':
+            $buttonClass = 'badge bg-label-warning me-1';
+            $statusText = 'Angsur';
+            break;
+        case 'baru':
+            $buttonClass = 'badge bg-label-danger me-1';
+            $statusText = 'Belum dibayar';
+            break;
+        default:
+            $buttonClass = 'btn-secondary'; // Or any other color you want for default case
+            $statusText = $this->status;
     }
+
+    return [
+        'buttonClass' => $buttonClass,
+        'statusText' => $statusText
+    ];
 }
+
+    
     public function scopeWaliSiswa($q)
     {
     return $q->whereIn('siswa_id', Auth::user()->siswa->pluck('id'));

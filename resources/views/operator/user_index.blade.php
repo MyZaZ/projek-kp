@@ -17,6 +17,7 @@
                             <th>No.HP</th>
                             <th>Email</th>
                             <th>Akses</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbodY>

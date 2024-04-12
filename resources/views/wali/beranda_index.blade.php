@@ -1,11 +1,11 @@
 @extends('layouts.app_sneat_wali')
 
 @section('content')
-<div class="container">
+
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">HI, WALI</div>
+                <h5 class="card-header">HI, {{ strtoupper($name) }}</h5>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -19,5 +19,5 @@
             </div>
         </div>
     </div>
-</div>
+
 @endsection

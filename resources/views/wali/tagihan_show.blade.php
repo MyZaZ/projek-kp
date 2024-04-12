@@ -40,7 +40,12 @@
                                 </tr>
                                 <tr>
                                     <td><b>Status</b></td>
-                                    <td colspan="2">: {{$tagihan->getStatusTagihanWali()}}</td>
+                                    <td colspan="2">:
+                                    @php
+                                        $status = $tagihan->getStatusTagihanWali();
+                                    @endphp
+                                    <span class="badge {{ $status['buttonClass'] }}">{{ $status['statusText'] }}</span>
+                                </td>
                                 </tr>
                             </table>
                         </div>
@@ -108,49 +113,65 @@
                             </div>
                         @endforeach
                     </div>
-                    <table class="table table-striped table-bordered mt-3">
-                        <thead class="table-dark">
-                            <tr>
-                                <td width="1%">NO</td>
-                                <td>TANGGAL</td>
-                                <td>JUMLAH DIBAYAR</td>
-                                <td>METODE</td>
-                                <td>SISA</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @php
-                                $totalTagihan = $tagihan->tagihanDetails->sum('jumlah_biaya');
-                                $totalPembayaran = 0; // Mulai dengan total pembayaran 0
-                            @endphp
-                            @foreach ($tagihan->pembayaran as $key => $item)
-                                <tr>
-                                    <td>{{ $key + 1 }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($item->tanggal_bayar)->translatedFormat('d F Y') }}</td>
-                                    <td>{{ formatRupiah($item->jumlah_dibayar) }}</td>
-                                    <td>{{ $item->metode_pembayaran }}</td>
-                                    <td>
-                                        @php
-                                            $totalPembayaran += $item->jumlah_dibayar; // Menambahkan jumlah pembayaran saat ini ke total pembayaran
-                                            $sisaTagihan = $totalTagihan - $totalPembayaran; // Menghitung sisa tagihan aktual
-                                            $sisaTagihan = max(0, $sisaTagihan); // Pastikan sisa tagihan tidak kurang dari 0
-                                        @endphp
-                                        {{ formatRupiah($sisaTagihan) }}
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                    
-                    <h5 class="font-weight-bold mt-3">Status Pembayaran :
-                        @if ($tagihan->status == 'lunas')
-                            <span class="text-success">{{ strtoupper($tagihan->status) }}</span>
-                        @elseif ($tagihan->status == 'angsur')
-                            <span class="text-warning">{{ strtoupper($tagihan->status) }}</span>
+@if ($tagihan->pembayaran->isNotEmpty() && $tagihan->pembayaran->where('tanggal_konfirmasi', '!=', null)->isNotEmpty())
+    <table class="table table-striped table-bordered mt-3">
+        <thead class="table-dark">
+            <tr>
+                <td width="1%">NO</td>
+                <td>TANGGAL</td>
+                <td>JUMLAH DIBAYAR</td>
+                <td>METODE</td>
+                <td>SISA</td>
+                <td>STATUS</td>
+            </tr>
+        </thead>
+        <tbody>
+            @php
+                $totalTagihan = $tagihan->tagihanDetails->sum('jumlah_biaya');
+                $totalPembayaran = 0; // Mulai dengan total pembayaran 0
+            @endphp
+            @foreach ($tagihan->pembayaran as $key => $item)
+                <tr>
+                    <td>{{ $key + 1 }}</td>
+                    <td>{{ \Carbon\Carbon::parse($item->tanggal_bayar)->translatedFormat('d F Y') }}</td>
+                    <td>{{ formatRupiah($item->jumlah_dibayar) }}</td>
+                    <td>{{ $item->metode_pembayaran }}</td>
+                    <td>
+                        @if ($item->tanggal_konfirmasi == null)
+                            -
                         @else
-                            <span class="text-danger">{{ strtoupper($tagihan->status) }}</span>
+                            @php
+                                $totalPembayaran += $item->jumlah_dibayar;
+                                $sisaTagihan = $totalTagihan - $totalPembayaran;
+                                $sisaTagihan = max(0, $sisaTagihan);
+                            @endphp
+                            {{ formatRupiah($sisaTagihan) }}
                         @endif
-                    </h5>
+                    </td>
+                   <td>
+                        @if ($item->tanggal_konfirmasi != null)
+                            <span class="badge bg-label-success me-1">Sukses</span>
+                        @else
+                            <span class="badge bg-label-warning me-1">Pending</span>
+                        @endif
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    <h5 class="font-weight-bold mt-3">Status Pembayaran :
+        @if ($tagihan->status == 'lunas')
+            <span class="text-success">{{ strtoupper($tagihan->status) }}</span>
+        @elseif ($tagihan->status == 'angsur')
+            <span class="text-warning">{{ strtoupper($tagihan->status) }}</span>
+        @else
+            <span class="text-danger">{{ strtoupper($tagihan->status) }}</span>
+        @endif
+    </h5>
+@endif
+
+
                 </div>
             </div>
         </div>

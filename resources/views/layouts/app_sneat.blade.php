@@ -25,7 +25,38 @@
     {
       min-width: 22rem;
     }
+
+    /* Teks notifikasi yang sudah dibaca menjadi samar */
+    .list-group-item.read {
+    opacity: 0.7; /* Atur kecerahan sesuai keinginan Anda */
+    }
+
   </style>
+  <script>
+  popupCenter = ({url, title, w, h}) => {
+    // Fixes dual-screen position                             Most browsers      Firefox
+    const dualScreenLeft = window.screenLeft !==  undefined ? window.screenLeft : window.screenX;
+    const dualScreenTop = window.screenTop !==  undefined   ? window.screenTop  : window.screenY;
+
+    const width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+    const height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+
+    const systemZoom = width / window.screen.availWidth;
+    const left = (width - w) / 2 / systemZoom + dualScreenLeft
+    const top = (height - h) / 2 / systemZoom + dualScreenTop
+    const newWindow = window.open(url, title, 
+      `
+      scrollbars=yes,
+      width=${w / systemZoom}, 
+      height=${h / systemZoom}, 
+      top=${top}, 
+      left=${left}
+      `
+    )
+
+    if (window.focus) newWindow.focus();
+}
+  </script>
   <head>
     <meta charset="utf-8" />
     <meta
@@ -202,24 +233,26 @@
                   <a href="javascript:void(0)" class="dropdown-notifications-all text-body" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Mark all as read" data-bs-original-title="Mark all as read"><i class="bx fs-4 bx-envelope-open"></i></a>
                 </div>
               </li>
-              <li class="dropdown-notifications-list scrollable-container ps">
-                <ul class="list-group list-group-flush">
-                  @foreach (auth()->user()->unreadNotifications as $notification)
-                  <li class="list-group-item list-group-item-action dropdown-notifications-item">
+            <li class="dropdown-notifications-list scrollable-container ps">
+    <ul class="list-group list-group-flush">
+        @foreach (auth()->user()->unreadNotifications as $notification)
+            <li class="list-group-item list-group-item-action dropdown-notifications-item {{ $notification->read() ? 'read' : '' }}">
+                <a href="{{ url($notification->data['url'] . '?id=' . $notification->id) }}">
                     <div class="d-flex">
-                      <div class="flex-grow-1">
-                        <h6 class="mb-1">{{ $notification->data['tittle'] }}💵</h6>
-                        <p class="mb-0">{{ ucwords($notification->data['messages']) }}</p>
-                        <small class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
-                      </div>
-                      <div class="flex-shrink-0 dropdown-notifications-actions">
-                        <a href="javascript:void(0)" class="dropdown-notifications-read"><span class="badge badge-dot"></span></a>
-                        <a href="javascript:void(0)" class="dropdown-notifications-archive"><span class="bx bx-x"></span></a>
-                      </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1">{{ $notification->data['tittle'] }}💵</h6>
+                            <p class="mb-0">{{ ucwords($notification->data['messages']) }}</p>
+                            <small class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
+                        </div>
+                        <div class="flex-shrink-0 dropdown-notifications-actions">
+                            <a href="javascript:void(0)" class="dropdown-notifications-read"><span class="badge badge-dot"></span></a>
+                            <a href="javascript:void(0)" class="dropdown-notifications-archive"><span class="bx bx-x"></span></a>
+                        </div>
                     </div>
-                  </li>
-                  @endforeach
-                </ul>
+                </a>
+            </li>
+        @endforeach
+    </ul>
               <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div></div></li>
             </ul>
           </li>
@@ -259,15 +292,6 @@
                       <a class="dropdown-item" href="#">
                         <i class="bx bx-cog me-2"></i>
                         <span class="align-middle">Settings</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="#">
-                        <span class="d-flex align-items-center align-middle">
-                          <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
-                          <span class="flex-grow-1 align-middle">Billing</span>
-                          <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
-                        </span>
                       </a>
                     </li>
                     <li>

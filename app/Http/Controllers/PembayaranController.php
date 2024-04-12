@@ -6,6 +6,8 @@ use App\Models\Pembayaran;
 use App\Models\Tagihan;
 use App\Http\Requests\StorePembayaranRequest;
 use App\Http\Requests\UpdatePembayaranRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class PembayaranController extends Controller
 {
@@ -31,7 +33,8 @@ class PembayaranController extends Controller
     public function store(StorePembayaranRequest $request)
     {
         $requestData = $request->validated();
-        $requestData['status_konfirmasi'] = 'sudah';
+        //$requestData['status_konfirmasi'] = 'sudah';
+        $requestData['tanggal_konfirmasi'] = now();
         $requestData['metode_pembayaran'] = 'manual';
         $tagihan = Tagihan::findOrFail($requestData['tagihan_id']);
         
@@ -63,10 +66,31 @@ class PembayaranController extends Controller
     /**
      * Display the specified resource.
      */
+
     public function show(Pembayaran $pembayaran)
     {
-        //
+        // Pastikan bahwa pengguna telah melakukan autentikasi sebelum melanjutkan
+        if (Auth::check()) {
+            // Menggunakan instance dari user yang sedang masuk
+            $user = Auth::user();
+
+            // Cek apakah notifikasi yang dimaksud dimiliki oleh pengguna yang sedang masuk
+            $notification = $user->unreadNotifications()->where('id', request('id'))->first();
+
+            // Periksa apakah notifikasi ditemukan
+            if ($notification) {
+                // Tandai notifikasi sebagai sudah dibaca
+                $notification->markAsRead();
+            }
+        }
+
+        // Setelah menandai notifikasi sebagai sudah dibaca, lanjutkan ke tampilan pembayaran
+        return view('operator.pembayaran_show', [
+            'model' => $pembayaran,
+            'route' => ['pembayaran.update', $pembayaran->id]
+        ]);
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -79,10 +103,41 @@ class PembayaranController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePembayaranRequest $request, Pembayaran $pembayaran)
-    {
-        //
+    public function update(Request $request, Pembayaran $pembayaran)
+{
+    //$pembayaran->status_konfirmasi = 'sudah';
+    $pembayaran->tanggal_konfirmasi = now();
+    $pembayaran->user_id = auth()->user()->id;
+    $pembayaran->save();
+
+    // Hitung total jumlah yang telah dibayar
+    $total_dibayar = Pembayaran::where('tagihan_id', $pembayaran->tagihan_id)->sum('jumlah_dibayar');
+    
+    // Temukan tagihan yang sesuai dengan pembayaran
+    $tagihan = Tagihan::findOrFail($pembayaran->tagihan_id);
+
+    // Hitung total tagihan
+    $total_tagihan = $tagihan->tagihanDetails->sum('jumlah_biaya');
+
+    // Hitung sisa tagihan setelah pembayaran
+    $sisa_tagihan = $total_tagihan - $total_dibayar;
+
+    if ($sisa_tagihan <= 0) {
+        // Jika sisa tagihan kurang dari atau sama dengan 0,
+        // atur status tagihan menjadi 'lunas'
+        $tagihan->status = 'lunas';
+    } else {
+        // Jika sisa tagihan lebih dari 0,
+        // atur status tagihan menjadi 'angsur'
+        $tagihan->status = 'angsur';
     }
+
+    $tagihan->save();
+
+    flash('Data Pembayaran Berhasil Di Konfirmasi')->success();
+    return back();
+}
+
 
     /**
      * Remove the specified resource from storage.

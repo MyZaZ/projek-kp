@@ -28,17 +28,24 @@
                                 <td>{{ $item->siswa->nama }}</td>
                                 <td>{{ $item->siswa->jurusan }}</td>
                                 <td>{{ $item->siswa->kelas }}</td>
-                                <td>{{ $item->tanggal_tagihan->format('F Y') }}</td>
-                                <td>
-                                    {{$item->getStatusTagihanWali()}}
+                                <td>{{ $item->tanggal_tagihan->format('d F Y') }}</td>
+                               <td>
+                                    @php
+                                        $status = $item->getStatusTagihanWali();
+                                    @endphp
+                                    <span class="badge {{ $status['buttonClass'] }}">{{ $status['statusText'] }}</span>
                                 </td>
+
                                 <td>
-                                    @if ($item->status == 'baru' || $item->status == 'angsur')
-                                    <a href="{{ route('wali.tagihan.show', $item->id) }}" class="btn btn-danger">Lakukan Pembayaran</a>
+                                    @if ($item->status == 'baru')
+                                        <a href="{{ route('wali.tagihan.show', $item->id) }}" class="btn btn-danger">Lakukan Pembayaran</a>
+                                    @elseif ($item->status == 'angsur')
+                                        <a href="{{ route('wali.tagihan.show', $item->id) }}" class="btn btn-warning">Bayar Angsuran</a>
                                     @else
-                                    <a href="" class="btn btn-success">Pembayaran Sudah Lunas</a>
+                                        <a href="" class="btn btn-success">Pembayaran Sudah Lunas</a>
                                     @endif
                                 </td>
+
                             </tr>
                             @empty
                             <tr>
