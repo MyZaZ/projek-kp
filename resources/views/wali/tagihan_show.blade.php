@@ -158,20 +158,17 @@
                 </tr>
             @endforeach
         </tbody>
-    </table>
-
-    <h5 class="font-weight-bold mt-3">Status Pembayaran :
-        @if ($tagihan->status == 'lunas')
-            <span class="text-success">{{ strtoupper($tagihan->status) }}</span>
-        @elseif ($tagihan->status == 'angsur')
-            <span class="text-warning">{{ strtoupper($tagihan->status) }}</span>
-        @else
-            <span class="text-danger">{{ strtoupper($tagihan->status) }}</span>
+            </table>
+            <h5 class="font-weight-bold mt-3">Status Pembayaran :
+                @if ($tagihan->status == 'lunas')
+                    <span class="text-success">{{ strtoupper($tagihan->status) }}</span>
+                @elseif ($tagihan->status == 'angsur')
+                    <span class="text-warning">{{ strtoupper($tagihan->status) }}</span>
+                @else
+                    <span class="text-danger">{{ strtoupper($tagihan->status) }}</span>
+                @endif
+            </h5>
         @endif
-    </h5>
-@endif
-
-
                 </div>
             </div>
         </div>

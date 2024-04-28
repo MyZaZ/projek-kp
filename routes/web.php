@@ -39,7 +39,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index']);
 
 Route::prefix('operator')->middleware(['auth', 'auth.operator'])->group(function () {
     //ini route khusus untuk operator

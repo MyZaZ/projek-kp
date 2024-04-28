@@ -49,6 +49,7 @@ class Tagihan extends Model
     {
         return $this->hasMany(tagihanDetail::class);
     }
+    
 
     /**
      * Get all of the comments for the Tagihan

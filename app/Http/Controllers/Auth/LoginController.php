@@ -55,7 +55,7 @@ class LoginController extends Controller
     } elseif ($user->akses == 'wali') {
         return redirect()->route('wali.beranda');
     } else {
-        Auth::user()->logout();
+        $this->guard()->logout();
         flash('Anda tidak memiliki hak akses')->error();
         return redirect()->route('login');
     }

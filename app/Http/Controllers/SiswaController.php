@@ -64,7 +64,7 @@ class SiswaController extends Controller
     $requestData = $request->validated();
 
     if ($request->hasFile('foto')) {
-        $requestData['foto'] = $request->file('foto')->store('public');
+        $requestData['foto'] = $request->file('foto')->store('public/fotos');
     }
     if ($request->filled('wali_id')) {
         $requestData['wali_status'] = 'ok';

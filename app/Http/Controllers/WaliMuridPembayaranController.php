@@ -101,7 +101,7 @@ class WaliMuridPembayaranController extends Controller
         'jumlah_dibayar' => 'required',
         'bukti_bayar' => 'required|image:jpeg,png,jpg,gif,svg|max:5000',
     ]);
-    $buktiBayar = $request->file('bukti_bayar')->store('public');
+    $buktiBayar = $request->file('bukti_bayar')->store('public/struk');
     $dataPembayaran = [
         'bank_id' => $request->bank_id,
         'wali_bank_id' => $waliBank->id,
