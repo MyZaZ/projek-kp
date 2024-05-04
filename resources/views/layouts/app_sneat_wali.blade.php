@@ -75,7 +75,7 @@
 
         <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
           <div class="app-brand demo">
-            <a href="index.html" class="app-brand-link">
+            <a href="#" class="app-brand-link">
              <img src="{{ asset('sneat')}}/assets/img/favicon/logo.png" alt="Logo" width="50" height="50">
               <span class="app-brand-text demo menu-text fw-bolder ms-2">PaySchool</span>
             </a>

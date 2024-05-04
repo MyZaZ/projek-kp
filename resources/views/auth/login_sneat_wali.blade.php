@@ -93,6 +93,9 @@
                     placeholder="Masukan Alamat Email"
                     autofocus
                   />
+                   @error('email')
+                  <div class="text-danger">{{ $message }}</div>
+                  @enderror
                 </div>
                 <div class="mb-3 form-password-toggle">
                   <div class="d-flex justify-content-between">
@@ -112,6 +115,9 @@
                     />
                     <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                   </div>
+                   @error('password')
+                  <div class="text-danger">{{ $message }}</div>
+                  @enderror
                 </div>
                 <div class="mb-3">
                   <div class="form-check">

@@ -27,12 +27,12 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Error - Pages | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
+    <title>Error - Pages | {{ config('app.name', 'Laravel') }}</title>
 
     <meta name="description" content="" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ asset('sneat')}}/assets/img/favicon/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('sneat')}}/assets/img/favicon/logo.png" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -85,7 +85,7 @@
             data-app-light-img="illustrations/page-misc-error-light.png"
           />
         </div>
-         <a href="{{route('operator.beranda')}}" class="btn btn-primary mt-3">Kembali ke beranda</a>
+         <a href="{{ url('/home') }}" class="btn btn-primary mt-3">Kembali ke beranda</a>
       </div>
     </div>
     <!-- /Error -->

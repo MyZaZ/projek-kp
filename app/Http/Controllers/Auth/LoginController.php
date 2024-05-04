@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
@@ -60,5 +61,33 @@ class LoginController extends Controller
         return redirect()->route('login');
     }
     }
+
+    protected function validateLogin(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+    }
+
+    protected function sendFailedLoginResponse(Request $request)
+{
+    $errors = [$this->username() => trans('auth.failed')];
+
+    // Check if email is incorrect
+    if ($request->filled('email')) {
+        $errors[$this->username()] = trans('auth.failed');
+    }
+
+    // Check if password is incorrect
+    if ($request->filled('password')) {
+        $errors['password'] = trans('auth.password');
+    }
+
+    throw ValidationException::withMessages($errors);
+}
+
+
+
 
 }
