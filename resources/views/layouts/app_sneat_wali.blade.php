@@ -91,20 +91,20 @@
             <!-- Dashboard -->
             <li class="menu-item {{ \Route::is('wali.beranda') ? 'active' : '' }}">
               <a href="{{route('wali.beranda')}}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                <i class="menu-icon fa fa-dashboard"></i>
                 <div data-i18n="Analytics">Dashboard</div>
               </a>
             </li>
              <li class="menu-item {{ \Route::is('wali.siswa.*') ? 'active' : '' }}">
               <a href="{{route('wali.siswa.index')}}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-collection"></i>
+                <i class="menu-icon fa fa-mortar-board"></i>
                 <div data-i18n="Tables">Data Siswa</div>
               </a>
             </li>
              </li>
              <li class="menu-item {{ \Route::is('wali.tagihan.*') ? 'active' : '' }}">
               <a href="{{route('wali.tagihan.index')}}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-collection"></i>
+                <i class="menu-icon fa fa-credit-card"></i>
                 <div data-i18n="Tables">Data Tagihan</div>
               </a>
             </li>

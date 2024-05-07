@@ -25,11 +25,11 @@
                     </div>
                 </div>
 
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
+                <div class="table-responsive mt-4">
+                    <table class="table table-bordered">
+                        <thead class="table-dark">
                             <tr>
-                                <th>No</th>
+                                <th width="1%">No</th>
                                 <th>Nama Bank</th>
                                 <th>No.Rekening</th>
                                 <th>Atas Nama</th>

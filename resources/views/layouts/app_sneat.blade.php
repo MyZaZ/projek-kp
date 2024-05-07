@@ -82,6 +82,7 @@
 
     <!-- Icons. Uncomment required icon fonts -->
     <link rel="stylesheet" href="{{ asset('sneat')}}/assets/vendor/fonts/boxicons.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <!-- Core CSS -->
     <link rel="stylesheet" href="{{ asset('sneat')}}/assets/vendor/css/core.css" class="template-customizer-core-css" />
@@ -128,47 +129,60 @@
             <!-- Dashboard -->
             <li class="menu-item {{ \Route::is('operator.beranda') ? 'active' : '' }}">
               <a href="{{route('operator.beranda')}}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                <i class="menu-icon fa fa-dashboard"></i>
                 <div data-i18n="Analytics">Dashboard</div>
               </a>
             </li>
-            <li class="menu-item {{ \Route::is('rekening.*') ? 'active' : '' }}">
+                <li class="menu-item {{ \Route::is('rekening.*') ? 'active' : '' }}">
               <a href="{{route('rekening.index')}}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-collection"></i>
+                <i class="menu-icon fa fa-bank"></i>
                 <div data-i18n="Tables">Rekening Sekolah</div>
               </a>
             </li>
-            <li class="menu-item {{ \Route::is('user.*') ? 'active' : '' }}">
-              <a href="{{route('user.index')}}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-collection"></i>
-                <div data-i18n="Tables">Data User</div>
+            <!-- Master Data -->
+              <li class="menu-item">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon fa fa-group"></i>
+                  <div data-i18n="Layouts">Data Master</div>
               </a>
+              <ul class="menu-sub">
+                <li class="menu-item {{ \Route::is('user.*') ? 'active' : '' }}">
+                  <a href="{{route('user.index')}}" class="menu-link">
+                    <div data-i18n="Tables">Data User</div>
+                  </a>
+                </li>
+                <li class="menu-item {{ \Route::is('wali.*') ? 'active' : '' }}">
+                  <a href="{{route('wali.index')}}" class="menu-link">
+                    <div data-i18n="Tables">Data Wali Murid</div>
+                  </a>
+                </li>
+                <li class="menu-item {{ \Route::is('siswa.*') ? 'active' : '' }}">
+                  <a href="{{route('siswa.index')}}" class="menu-link">
+                    <div data-i18n="Tables">Data Siswa</div>
+                  </a>
+                </li>
+              </ul>
             </li>
-            <li class="menu-item {{ \Route::is('wali.*') ? 'active' : '' }}">
-              <a href="{{route('wali.index')}}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-collection"></i>
-                <div data-i18n="Tables">Data Wali Murid</div>
+            <!-- Data Tagihan -->
+            <li class="menu-item">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon fa fa-money"></i>
+                  <div data-i18n="Layouts">Data Tagihan</div>
               </a>
-            </li>
-             <li class="menu-item {{ \Route::is('siswa.*') ? 'active' : '' }}">
-              <a href="{{route('siswa.index')}}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-collection"></i>
-                <div data-i18n="Tables">Data Siswa</div>
-              </a>
-            </li>
+              <ul class="menu-sub">
             <li class="menu-item {{ \Route::is('biaya.*') ? 'active' : '' }}">
               <a href="{{route('biaya.index')}}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-collection"></i>
                 <div data-i18n="Tables">Data Biaya</div>
               </a>
             </li>
             <li class="menu-item {{ \Route::is('tagihan.*') ? 'active' : '' }}">
               <a href="{{route('tagihan.index')}}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-collection"></i>
                 <div data-i18n="Tables">Data Tagihan</div>
               </a>
             </li>
-            <li class="menu-item">
+            </ul>
+            </li>
+                <li class="menu-item">
               <a href="{{route('logout')}}" class="menu-link">
                 <i class="bx bx-power-off me-2"></i>
                 <div data-i18n="Tables">Logout</div>

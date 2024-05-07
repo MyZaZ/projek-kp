@@ -10,18 +10,17 @@
                 <div class="row">
                 </div>
 
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
+                <div class="table-responsive mt-4">
+                    <table class="table table-bordered">
+                        <thead class="table-dark">
                             <tr>
-                                <th>No</th>
+                                <th width="1%">No</th>
                                 <th>Nama Wali</th>
                                 <th>Nama</th>
                                 <th>NISN</th>
                                 <th>Jurusan</th>
                                 <th>Kelas</th>
                                 <th>Angkatan</th>
-                                <th>Created By</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -35,7 +34,6 @@
                                 <td>{{ $item->jurusan }}</td>
                                 <td>{{ $item->kelas }}</td>
                                 <td>{{ $item->angkatan }}</td>
-                                <td>{{ $item->user->name }}</td>
                             </tr>
 
                             @empty

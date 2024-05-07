@@ -8,11 +8,11 @@
                 <h5 class="card-header">{{$title}}</h5>
                 <div class="card-body">
                 <a href="{{ route($routePrefix .'.create') }}" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i>Tambah Data</a>
-                <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
+               <div class="table-responsive mt-4">
+                    <table class="table table-bordered">
+                        <thead class="table-dark">
                         <tr>
-                            <th>No</th>
+                            <th width="1%">No</th>
                             <th>Nama</th>
                             <th>No.HP</th>
                             <th>Email</th>

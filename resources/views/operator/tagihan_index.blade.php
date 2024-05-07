@@ -15,10 +15,10 @@
                         {!! Form::open(['route' => $routePrefix . '.index','method' => 'GET', 'class' => 'form-inline float-right']) !!}
                             <div class="row g-3">
                             <div class="col-md-4 col-sm-12">
-                                {!! Form::selectMonth('bulan', request('bulan'), ['class' => 'form-control']) !!}
+                                {!! Form::selectMonth('bulan', request('bulan'), ['class' => 'form-control','placeholder' => 'Pilih Bulan']) !!}
                             </div>
                             <div class="col-md-4 col-sm-12">
-                                {!! Form::selectRange('tahun', 2024, date('Y')+1, request('tahun'), ['class' => 'form-control']) !!}
+                                {!! Form::selectRange('tahun', 2024, date('Y')+1, request('tahun'), ['class' => 'form-control','placeholder' => 'Pilih Tahun']) !!}
                             </div>
                             <div class="col">
                             <button type="submit"  class="btn btn-primary">Tampil</button>
@@ -28,11 +28,11 @@
                     </div>
                 </div>
 
-                <div class="table-responsive mt-3">
-                    <table class="table table-striped">
-                        <thead>
+                <div class="table-responsive mt-4">
+                    <table class="table table-bordered">
+                        <thead class="table-dark">
                             <tr>
-                                <th>No</th>
+                                <th width="1%">No</th>
                                 <th>NISN</th>
                                 <th>Nama</th>
                                 <th>Tanggal Tagihan</th>

@@ -6207,7 +6207,7 @@ a.invert-bg-dark:hover, a.invert-bg-dark:focus {
   border-color: #394859;
 }
 .table-dark th {
-  border-bottom-color: #394859 !important;
+  color: #fff !important;
 }
 .table-dark .btn-icon {
   color: #fff;
