@@ -180,6 +180,11 @@
                 <div data-i18n="Tables">Data Tagihan</div>
               </a>
             </li>
+            <li class="menu-item {{ \Route::is('pembayaran.*') ? 'active' : '' }}">
+              <a href="{{route('pembayaran.index')}}" class="menu-link">
+                <div data-i18n="Tables">Data Pembayaran</div>
+              </a>
+            </li>
             </ul>
             </li>
                 <li class="menu-item">

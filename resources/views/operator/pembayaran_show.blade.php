@@ -57,6 +57,7 @@
                                 <td>Nama Wali</td>
                                 <td>: {{ $model->wali->name }}</td>
                             </tr>
+                            @if ($model->metode_pembayaran != "manual")
                             <tr>
                                 <td colspan="2" class="bg-secondary text-white fw-bold">INFORMASI BANK PENGIRIM</td>
                             </tr>
@@ -91,13 +92,14 @@
                               <tr>
                                 <td colspan="2" class="bg-secondary text-white fw-bold">INFORMASI PEMBAYARAN</td>
                             </tr>
+                            @endif
                             <tr>
                                 <td>Metode Pembayaran</td>
                                 <td>: {{ $model->metode_pembayaran }}</td>
                             </tr>
                             <tr>
                                 <td>Tanggal Pembayaran</td>
-                                <td>: {{ \Carbon\Carbon::parse($model->tanggal_bayar)->translatedFormat('d F Y H:i') }}</td>
+                                <td>: {{ \Carbon\Carbon::parse($model->tanggal_bayar)->translatedFormat('d F Y') }}</td>
                             </tr>
                             <tr>
                                 <td>Jumlah Total Tagihan </td>
@@ -124,12 +126,14 @@
                                         {{ formatRupiah($sisaTagihan) }}
                                 </td>
                             </tr>
+                            @if ($model->metode_pembayaran != "manual")
                             <tr>
                                 <td>Bukti Pembayaran</td>
                                 <td>: 
                                     <a href="javascript:void[0]" onclick="popupCenter({url: '{{\Storage::url($model->bukti_bayar)}}', title: 'xtf', w: 900, h: 500}); " >Lihat Bukti Bayar</a>
                                 </td>
                             </tr>
+                            @endif
                             <tr>
                                 <td>Status Konfirmasi</td>
                                 <td>: 

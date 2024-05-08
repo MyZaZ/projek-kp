@@ -10,8 +10,9 @@ use Illuminate\Support\Facades\Auth;
 class WaliMuridTagihanController extends Controller
 {
     public function index()
-    {
-        $data['tagihan'] = Tagihan::WaliSiswa()->get();
+    {   $data = [
+        'tagihan' => Tagihan::WaliSiswa()->get()
+    ];
         return view('wali.tagihan_index', $data);
     }
 

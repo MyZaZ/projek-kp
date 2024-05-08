@@ -8,9 +8,11 @@ class BerandaWaliController extends Controller
 {
     public function index()
 {   
+   $data = [
+    'name' => Auth::user()->name
+];
 
-    $data = ['name' => Auth::user()->name];
-    return view('wali.beranda_index', $data);
+return view('wali.beranda_index', $data);
     
 }
 

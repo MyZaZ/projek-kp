@@ -14,9 +14,18 @@ class PembayaranController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if ($request->filled('bulan') && $request->filled('tahun') ) {
+            $models = Pembayaran::latest()
+            ->whereMonth('tanggal_konfirmasi', $request->bulan)
+            ->whereYear('tanggal_konfirmasi', $request->tahun)
+            ->paginate(50);
+        }else{ 
+            $models = Pembayaran::latest()->orderBy('tanggal_konfirmasi','desc')->paginate(50);
+        }
+        $data['models'] = $models;
+        return view('operator.pembayaran_index', $data);
     }
 
     /**
@@ -37,6 +46,7 @@ class PembayaranController extends Controller
         $requestData['tanggal_konfirmasi'] = now();
         $requestData['metode_pembayaran'] = 'manual';
         $tagihan = Tagihan::findOrFail($requestData['tagihan_id']);
+        $requestData['wali_id'] = $tagihan->siswa->wali_id ?? 0;
         
         // Hitung total jumlah yang telah dibayar
         $total_dibayar = Pembayaran::where('tagihan_id', $requestData['tagihan_id'])->sum('jumlah_dibayar');
@@ -142,7 +152,7 @@ class PembayaranController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Pembayaran $pembayaran)
+    public function destroy(Request $request,Pembayaran $pembayaran)
     {
         //
     }

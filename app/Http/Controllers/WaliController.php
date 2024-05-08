@@ -89,16 +89,13 @@ class WaliController extends Controller
 
     // Dapatkan semua siswa yang belum terhubung dengan wali atau tidak memiliki wali
     $siswa_belum_terhubung = \App\Models\Siswa::whereDoesntHave('wali')
-        ->orWhereNotIn('id', $id_siswa_terhubung)
         ->pluck('nama', 'id');
 
     // Kembalikan tampilan dengan data siswa yang terhubung dan belum terhubung
     return view('operator.' . $this->viewShow, [
-        'siswa_terhubung' => $siswa_terhubung,
-        'siswa_belum_terhubung' => $siswa_belum_terhubung,
+        'siswa' => $siswa_belum_terhubung,
         'model' => $wali,
-        'title' => 'Detail Wali Murid',
-        'siswa' => $siswa_belum_terhubung // Tambahkan variabel $siswa ke dalam view
+        'title' => 'Detail Wali Murid'
     ]);
 }
 

@@ -8,8 +8,10 @@ use Illuminate\Support\Facades\Auth;
 class WaliMuridSiswaController extends Controller
 {
     public function index()
-    {
-        $data['models'] = Auth::user()->siswa;
+    {   
+        $data = [
+            'models' => Auth::user()->siswa
+        ];
         return view('wali.siswa_index',$data);
     }
 }
