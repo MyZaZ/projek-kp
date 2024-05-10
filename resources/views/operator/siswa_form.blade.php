@@ -46,7 +46,7 @@
                         </div>
                         <div class="form-grup mt-3">
                             <label for="angkatan">Angkatan</label>
-                            {!! Form::selectRange('angkatan', 2023, date('Y') + 1, null, ['class' => 'form-control']) !!}
+                            {!! Form::selectRange('angkatan', 2021, date('Y') + 1, null, ['class' => 'form-control']) !!}
                             <span class="text-danger">{{ $errors->first('angkatan') }}</span>
                         </div>
                          @if ($model->foto != null)

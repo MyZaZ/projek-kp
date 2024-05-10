@@ -15,7 +15,7 @@
                             {!! Form::select(
                                 'status_konfirmasi',
                                 [
-                                    '' => 'Pilih Satatus',
+                                    '' => 'Pilih Status Pembayaran',
                                     'sudah_dikonfirmasi' => 'Sudah Dikonfirmasi',
                                     'belum_dikonfirmasi' => 'Belum Dikonfirmasi',
                                 ],
@@ -91,7 +91,7 @@
 
                                     ]) !!}
                                     <a href="{{route('pembayaran.show',$item->id) }}"
-                                        class="btn btn-info btn-sm mx-3">
+                                        class="btn btn-info btn-sm mx-2">
                                         <i class="fa fa-eye"></i>Detail
                                     </a>
                                     <button type="submit" class="btn btn-danger btn-sm">

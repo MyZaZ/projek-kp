@@ -51,11 +51,8 @@
                                     'onsubmit' => 'return confirm("Yakin ingin menghapus data ini?")',
 
                                     ]) !!}
-                                    <a href="{{route($routePrefix .'.edit',$item->id)}}" class="btn btn-warning btn-sm">
+                                    <a href="{{route($routePrefix .'.edit',$item->id)}}" class="btn btn-warning btn-sm mx-2">
                                         <i class="fa fa-edit"></i>Edit
-                                    </a>
-                                    <a href="{{route($routePrefix .'.show',$item->id)}}" class="btn btn-info btn-sm">
-                                        <i class="fa fa-eye"></i>Detail
                                     </a>
                                     <button type="submit" class="btn btn-danger btn-sm">
                                         <i class="fa fa-trash"></i> Hapus

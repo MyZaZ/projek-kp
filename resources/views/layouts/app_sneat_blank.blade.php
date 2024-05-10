@@ -68,7 +68,7 @@
   </head>
 <style>
     body {
-        background: grey;
+        background: white;
         margin-top: 120px;
         margin-bottom: 120px;
     }

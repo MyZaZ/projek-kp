@@ -18,7 +18,7 @@
                             {!! Form::select(
                                 'status',
                                 [
-                                    '' => 'Pilih Satatus',
+                                    '' => 'Pilih Status',
                                     'lunas' => 'Lunas',
                                     'baru' => 'Baru',
                                     'angsur' => 'Angsur',
@@ -100,7 +100,7 @@
                                         'tahun'=> $item->tanggal_tagihan->format('Y'),
 
                                         
-                                        ])}}" class="btn btn-info btn-sm mx-3">
+                                        ])}}" class="btn btn-info btn-sm mx-2">
                                         <i class="fa fa-eye"></i>Detail
                                     </a>
                                     <button type="submit" class="btn btn-danger btn-sm">
