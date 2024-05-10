@@ -182,10 +182,21 @@
             </li>
             <li class="menu-item {{ \Route::is('pembayaran.*') ? 'active' : '' }}">
               <a href="{{route('pembayaran.index')}}" class="menu-link">
-                <div data-i18n="Tables">Data Pembayaran</div>
+                <div data-i18n="Tables">
+                Data Pembayaran
+                <span class="badge badge-center rounded-pill bg-danger">
+                {{auth()->user()->unreadNotifications->count()}}
+                </span>
+                </div>
               </a>
             </li>
             </ul>
+            </li>
+            <li class="menu-item {{ \Route::is('laporan.*') ? 'active' : '' }}">
+              <a href="{{route('laporanform.create')}}" class="menu-link">
+                <i class="menu-icon fa fa-print"></i>
+                <div data-i18n="Tables">Laporan</div>
+              </a>
             </li>
                 <li class="menu-item">
               <a href="{{route('logout')}}" class="menu-link">

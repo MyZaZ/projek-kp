@@ -18,6 +18,7 @@ use App\Http\Controllers\WaliMuridTagihanController;
 use App\Http\Controllers\WaliMuridPembayaranController;
 use App\Http\Controllers\PembayaranRekeningController;
 use App\Http\Controllers\BankController;
+use App\Http\Controllers\LaporanFormController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -61,6 +62,8 @@ Route::prefix('operator')->middleware(['auth', 'auth.operator'])->group(function
     Route::post('/biaya', [BiayaController::class, 'store'])->name('biayastore');
     Route::post('/rekening', [PembayaranRekeningController::class, 'store'])->name('rekeningstore');
     Route::post('/tagihan', [TagihanController::class, 'store'])->name('tagihanstore'); 
+    //ini route laporan
+    Route::get('laporan/create',[LaporanFormController::class,'create'])->name('laporanform.create');
 });
 
 Route::get('login-wali',[LoginController::class,'showLoginFormWali'])->name('login.wali');

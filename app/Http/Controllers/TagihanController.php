@@ -25,22 +25,26 @@ class TagihanController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->filled('bulan') && $request->filled('tahun') ) {
-            $models = Model::latest()
-            ->whereMonth('tanggal_tagihan', $request->bulan)
-            ->whereYear('tanggal_tagihan', $request->tahun)
-            ->paginate(50);
-        }else{
-            $models = Model::Latest()->paginate(50);
+        $models = Model::latest();
+
+        if ($request->filled('bulan') && $request->filled('tahun')) {
+            $models->whereMonth('tanggal_tagihan', $request->bulan)
+                ->whereYear('tanggal_tagihan', $request->tahun);
         }
+        
+        if ($request->filled('status')) {
+            $models->where('status', $request->status);
+        }
+
+        $models = $models->paginate(50);
+
         return view('operator.' . $this->viewIndex, [
             'models' => $models,
             'routePrefix' => $this->routePrefix,
             'title' => 'Data Tagihan'
-            
-        
         ]);
     }
+
 
     /**
      * Show the form for creating a new resource.

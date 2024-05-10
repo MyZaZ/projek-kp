@@ -15,11 +15,9 @@ class Pembayaran extends Model
     protected $with = ['user','tagihan'];
     protected $append = ['status_konfirmasi'];
 
-    protected function statuskonfirmasi(): Attribute
+    public function getStatusKonfirmasiAttribute()
     {
-        return Attribute::make(
-            get: fn ($value) => ($this->tanggal_konfirmasi == null) ? 'Belum Dikonfirmasi' : 'Sudah Dikonfirmasi',
-        );
+        return $this->attributes['tanggal_konfirmasi'] == null ? 'Belum Dikonfirmasi' : 'Sudah Dikonfirmasi';
     }
     /**
      * Get the user that owns the Pembayaran

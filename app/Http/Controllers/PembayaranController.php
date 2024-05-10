@@ -16,16 +16,24 @@ class PembayaranController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->filled('bulan') && $request->filled('tahun') ) {
-            $models = Pembayaran::latest()
-            ->whereMonth('tanggal_konfirmasi', $request->bulan)
-            ->whereYear('tanggal_konfirmasi', $request->tahun)
-            ->paginate(50);
-        }else{ 
-            $models = Pembayaran::latest()->orderBy('tanggal_konfirmasi','desc')->paginate(50);
+        $models = Pembayaran::latest();
+        
+        if ($request->filled('bulan') && $request->filled('tahun')) {
+            $models->whereMonth('tanggal_konfirmasi', $request->bulan)
+                ->whereYear('tanggal_konfirmasi', $request->tahun);
         }
-        $data['models'] = $models;
-        return view('operator.pembayaran_index', $data);
+
+        if ($request->filled('status_konfirmasi')) {
+            if ($request->status_konfirmasi == 'sudah_dikonfirmasi') {
+                $models->whereNotNull('tanggal_konfirmasi');
+            } elseif ($request->status_konfirmasi == 'belum_dikonfirmasi') {
+                $models->whereNull('tanggal_konfirmasi');
+            }
+        }
+
+        $models = $models->paginate(50);
+
+        return view('operator.pembayaran_index', ['models' => $models]);
     }
 
     /**
@@ -152,8 +160,11 @@ class PembayaranController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request,Pembayaran $pembayaran)
-    {
-        //
-    }
+    public function destroy(Request $request, $id)
+{
+    $pembayaran = Pembayaran::findOrFail($id);
+    $pembayaran->delete();
+    flash('Data pembayaran berhasil dihapus')->success();
+    return back();
+}
 }

@@ -11,13 +11,26 @@
                     <div class="col">
                         <a href="{{ route($routePrefix .'.create') }}" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Tambah Data</a>
                     </div>
-                    <div class="col">
+                    <div class="col-md-6">
                         {!! Form::open(['route' => $routePrefix . '.index','method' => 'GET', 'class' => 'form-inline float-right']) !!}
-                            <div class="row g-3">
-                            <div class="col-md-4 col-sm-12">
+                            <div class="row gx-2">
+                            <div class="col-md-2 col-sm-12">
+                            {!! Form::select(
+                                'status',
+                                [
+                                    '' => 'Pilih Satatus',
+                                    'lunas' => 'Lunas',
+                                    'baru' => 'Baru',
+                                    'angsur' => 'Angsur',
+                                ],
+                                request('status'),
+                             ['class' => 'form-control'],
+                             ) !!}
+                             </div>
+                            <div class="col-md-2 col-sm-12">
                                 {!! Form::selectMonth('bulan', request('bulan'), ['class' => 'form-control','placeholder' => 'Pilih Bulan']) !!}
                             </div>
-                            <div class="col-md-4 col-sm-12">
+                            <div class="col-md-2 col-sm-12">
                                 {!! Form::selectRange('tahun', 2024, date('Y')+1, request('tahun'), ['class' => 'form-control','placeholder' => 'Pilih Tahun']) !!}
                             </div>
                             <div class="col">
