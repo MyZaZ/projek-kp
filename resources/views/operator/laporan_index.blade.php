@@ -58,8 +58,21 @@
                 <div class="row mt-3">
                     <div class="col-md-12">
                         <h5>Laporan Pembayaran</h5>
-                        {!! Form::open(['url' => '','method' => 'GET']) !!}
+                        {!! Form::open(['route' => 'laporanpembayaran.index','method' => 'GET','target' => 'blank']) !!}
                             <div class="row gx-2 align-items-end">
+                              <div class="col-md-2 col-sm-12">
+                                    <label for="angkatan">Angkatan</label>
+                                    {!! Form::selectRange('angkatan', 2021, date('Y') + 1, null, ['class' => 'form-control', 'placeholder' => 'Pilih Angkatan']) !!}
+                                    <span class="text-danger">{{ $errors->first('angkatan') }}</span>
+                                </div>
+                                  <div class="col-md-2 col-sm-12">
+                                    <label for="jurusan">Jurusan</label>
+                                    {!! Form::select('jurusan', [
+                                        'RPL' => 'Rekayasa Perangkat Lunak',
+                                        'TKJ' => 'Teknik Komputer dan Jaringan',
+                                    ], null, ['class' => 'form-control','placeholder' => 'Pilih Jurusan']) !!}
+                                    <span class="text-danger">{{ $errors->first('jurusan') }}</span>
+                                </div>
                                 <div class="col-md-2 col-sm-12">
                                     <label for="status_konfirmasi">Status Pembayaran</label>
                                     {!! Form::select(

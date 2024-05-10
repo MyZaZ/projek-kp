@@ -15,7 +15,7 @@ class LaporanTagihanController extends Controller
             $tagihan = $tagihan->whereMonth('tanggal_tagihan', $request->bulan);
         }
 
-        if ($request->filled('tahuan')) {
+        if ($request->filled('tahun')) {
             $tagihan = $tagihan->whereYear('tanggal_tagihan', $request->tahun);
         }
 
